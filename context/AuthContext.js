@@ -20,6 +20,8 @@ const AuthReducer = (state, action) => {
       return { ...state, otpCode: action.payload }
     case 'SIGN_IN':
       return { ...state, token: action.payload, loading: false }
+    case 'REDIRECT_TO_LOGIN':
+      return { ...state, redirectToLogin: action.payload }
     case 'SIGN_OUT':
       return { ...state, tokenValid: action.payload, loading: false }
     case 'SET_TOKEN_VALID':
@@ -67,7 +69,7 @@ const requestOtp = (dispatch) => async (data) => {
   }
 }
 
-const setOtpCode = (dispatch) => async (data) => {
+const setOtpCode = (dispatch) => (data) => {
   dispatch({ type: 'SET_OTP_CODE', payload: data })
   return
 }
@@ -110,7 +112,13 @@ const tokenValidation = (dispatch) => async () => {
 
 const signout = (dispatch) => async () => {
   await AsyncStorage.removeItem('token')
+  dispatch({ type: 'REDIRECT_TO_LOGIN', payload: true })
   dispatch({ type: 'SIGN_OUT', payload: 'false' })
+  return
+}
+
+const setRedirectToLogin = (dispatch) => (data) => {
+  dispatch({ type: 'REDIRECT_TO_LOGIN', payload: data })
   return
 }
 
@@ -124,6 +132,7 @@ export const { Provider, Context } = createDataContext(
     verifyOtp,
     tokenValidation,
     signout,
+    setRedirectToLogin,
   },
   {
     loading: false,
@@ -132,5 +141,6 @@ export const { Provider, Context } = createDataContext(
     otpCode: '',
     token: null,
     tokenValid: false,
+    redirectToLogin: false,
   }
 )

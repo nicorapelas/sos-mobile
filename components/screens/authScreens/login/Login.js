@@ -23,6 +23,10 @@ const Login = () => {
   } = useContext(AuthContext)
 
   useEffect(() => {
+    console.log(`hello login screen`)
+  }, [])
+
+  useEffect(() => {
     console.log(error)
   }, [error])
 

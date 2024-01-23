@@ -1,19 +1,14 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import {
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-} from 'react-native'
+import React, { useContext, useEffect, useRef } from 'react'
+import { View, StyleSheet, Animated, Dimensions } from 'react-native'
 
+import MenuItems from './MenuItems'
 import { Context as MenuContext } from '../../../context/MenuContext'
 
 const Menu = () => {
   const heightAnim = useRef(new Animated.Value(0)).current
 
   const {
-    state: { menuExpanded },
+    state: { menuExpanded, useStaticMenu },
   } = useContext(MenuContext)
 
   // Get screen dimensions
@@ -28,13 +23,37 @@ const Menu = () => {
     }).start()
   }, [menuExpanded, heightAnim])
 
-  return (
-    <Animated.View style={styles.container}>
-      <Animated.View
-        style={[styles.menu, { height: heightAnim, width: screenWidth * 0.5 }]}
-      />
-    </Animated.View>
-  )
+  const renderContent = () => {
+    switch (useStaticMenu) {
+      case true:
+        return (
+          <View style={styles.container}>
+            <View style={styles.menuStatic}>
+              <MenuItems />
+            </View>
+          </View>
+        )
+      case false:
+        return (
+          <Animated.View style={styles.container}>
+            <Animated.View
+              style={{
+                backgroundColor: '#ffff',
+                position: 'absolute',
+                height: heightAnim,
+                width: screenWidth * 0.5,
+                zIndex: 10,
+              }}
+            >
+              <MenuItems />
+            </Animated.View>
+          </Animated.View>
+        )
+      default:
+        break
+    }
+  }
+  return renderContent()
 }
 
 const styles = StyleSheet.create({
@@ -43,8 +62,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   menu: {
-    position: 'absolute',
     backgroundColor: '#ffff',
+    position: 'absolute',
+  },
+  menuStatic: {
+    height: Dimensions.get('window').height * 0.3,
+    width: Dimensions.get('window').width * 0.5,
+    backgroundColor: '#ffff',
+    position: 'absolute',
   },
   button: {
     position: 'absolute',

@@ -6,11 +6,17 @@ import { Context as MenuContext } from '../../../context/MenuContext'
 
 const Header = () => {
   const {
-    state: { menuExpanded },
+    state: { menuExpanded, useStaticMenu },
     setMenuExpanded,
+    setUseStaticMenu,
   } = useContext(MenuContext)
 
   const toggleMenu = () => {
+    if (useStaticMenu) {
+      setUseStaticMenu(false)
+      setMenuExpanded(false)
+      return
+    }
     setMenuExpanded(!menuExpanded)
   }
 

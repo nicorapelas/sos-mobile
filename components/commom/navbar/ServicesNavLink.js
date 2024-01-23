@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { Context as NavContext } from '../../../context/NavContext'
+import { Context as MenuContext } from '../../../context/MenuContext'
 import { normalize } from '../../../utils/fontUtils'
 
 const ServicesNavLink = () => {
@@ -11,8 +12,16 @@ const ServicesNavLink = () => {
     setNavTebSelected,
   } = useContext(NavContext)
 
+  const {
+    state: { menuExpanded },
+    setUseStaticMenu,
+  } = useContext(MenuContext)
+
   const handlePress = () => {
     setNavTebSelected('services')
+    if (menuExpanded) {
+      setUseStaticMenu(true)
+    }
   }
 
   const renderLoader = () => {

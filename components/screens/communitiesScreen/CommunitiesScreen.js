@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
 import CreateCommunity from './CreateCommunity'

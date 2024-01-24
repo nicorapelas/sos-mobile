@@ -6,6 +6,7 @@ import CommunitiesScreen from '../communitiesScreen/CommunitiesScreen'
 import DevicesScreen from '../devicesScreen/DevicesScreen'
 import NotificationsScreen from '../notificationScreen/NotificationsScreen'
 import ServicesScreen from '../servicesScreen/ServicesScreen'
+import FormScreen from '../formScreen/FormScreen'
 
 const MainContentRender = () => {
   const {
@@ -22,6 +23,8 @@ const MainContentRender = () => {
         return <NotificationsScreen />
       case 'services':
         return <ServicesScreen />
+      case 'formScreen':
+        return <FormScreen />
       default:
         break
     }

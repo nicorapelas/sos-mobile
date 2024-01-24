@@ -9,7 +9,7 @@ import { normalize } from '../../../utils/fontUtils'
 const DevicesNavLink = () => {
   const {
     state: { navTabSelected },
-    setNavTebSelected,
+    setNavTabSelected,
   } = useContext(NavContext)
 
   const {
@@ -18,7 +18,7 @@ const DevicesNavLink = () => {
   } = useContext(MenuContext)
 
   const handlePress = () => {
-    setNavTebSelected('devices')
+    setNavTabSelected('devices')
     if (menuExpanded) {
       setUseStaticMenu(true)
     }

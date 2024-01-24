@@ -18,7 +18,7 @@ const Menu = () => {
   useEffect(() => {
     Animated.timing(heightAnim, {
       toValue: menuExpanded ? screenHeight * 0.3 : 0, // 30% of screen height
-      duration: 500,
+      duration: 200,
       useNativeDriver: false,
     }).start()
   }, [menuExpanded, heightAnim])

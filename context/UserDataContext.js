@@ -8,6 +8,8 @@ const UserDataReducer = (state, action) => {
   switch (action.type) {
     case 'LOADING':
       return { ...state, loading: true }
+    case 'FETCH_USER':
+      return { ...state, user: action.payload, loading: false }
     case 'FETCH_USER_IP_DATA':
       return { ...state, userIpData: action.payload, loading: false }
     case 'ADD_ERROR':
@@ -22,6 +24,8 @@ const UserDataReducer = (state, action) => {
       return { ...state, userCountryIpData: action.payload }
     case 'SET_USER_PHONE_NUMBER':
       return { ...state, userPhoneNumber: action.payload }
+    case 'SET_FETCH_USER_COUNT':
+      return { ...state, fetchUserCount: action.payload, loading: false }
     default:
       return state
   }
@@ -58,17 +62,20 @@ setUserPhoneNumber = (dispatch) => (data) => {
 }
 
 const fetchUser = (dispatch) => async () => {
-  console.log(`at action`)
-  // dispatch({ type: 'LOADING' })
+  dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.get('/user/fetch-user')
-    console.log('hello world', response.data)
+    dispatch({ type: 'FETCH_USER', payload: response.data })
   } catch (error) {
     dispatch({
       type: 'ADD_ERROR',
       payload: error,
     })
   }
+}
+
+const setFetchUserCount = (dispatch) => (data) => {
+  dispatch({ type: 'SET_FETCH_USER_COUNT', payload: data })
 }
 
 export const { Provider, Context } = createDataContext(
@@ -80,6 +87,7 @@ export const { Provider, Context } = createDataContext(
     setUserCountryIpData,
     setUserPhoneNumber,
     fetchUser,
+    setFetchUserCount,
   },
   {
     loading: false,
@@ -88,5 +96,7 @@ export const { Provider, Context } = createDataContext(
     success: null,
     userCountryIpData: null,
     userPhoneNumber: null,
+    user: null,
+    fetchUserCount: 0,
   }
 )

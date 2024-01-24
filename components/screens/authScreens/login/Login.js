@@ -18,17 +18,17 @@ const Login = () => {
   } = useContext(UserDataContext)
 
   const {
-    state: { error, status },
+    state: { error, status, redirectToLogin },
     requestOtp,
+    setRedirectToLogin,
   } = useContext(AuthContext)
 
   useEffect(() => {
-    console.log(`hello login screen`)
-  }, [])
-
-  useEffect(() => {
-    console.log(error)
-  }, [error])
+    if (redirectToLogin) {
+      setUserPhoneNumber(null)
+      setRedirectToLogin(false)
+    }
+  }, [redirectToLogin])
 
   useEffect(() => {
     if (userCountryIpData) {

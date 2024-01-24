@@ -19,7 +19,7 @@ const MenuItems = () => {
     } else {
       setShowContent(false)
       if (menuExpanded) {
-        const timer = setTimeout(() => setShowContent(true), 500)
+        const timer = setTimeout(() => setShowContent(true), 200)
         return () => clearTimeout(timer)
       }
     }

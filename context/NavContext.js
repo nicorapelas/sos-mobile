@@ -11,14 +11,14 @@ const NavReducer = (state, action) => {
 }
 
 // Actions
-const setNavTebSelected = (dispatch) => (data) => {
+const setNavTabSelected = (dispatch) => (data) => {
   dispatch({ type: 'SET_NAV_TAB_SELECTED', payload: data })
 }
 
 export const { Provider, Context } = createDataContext(
   NavReducer,
   {
-    setNavTebSelected,
+    setNavTabSelected,
   },
   {
     navTabSelected: 'devices',

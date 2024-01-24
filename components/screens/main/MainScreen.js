@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import Header from '../../commom/header/Header'
@@ -6,19 +6,33 @@ import Navbar from '../../commom/navbar/NavBar'
 import MainContentRender from './MainContentRender'
 
 import { Context as UserDataContext } from '../../../context/UserDataContext'
+import { Context as NavContext } from '../../../context/NavContext'
 
 const MainScreen = () => {
+  const [count, setCount] = useState(0)
+
   const {
-    state: { user },
+    state: { user, fetchUserCount },
     fetchUser,
+    setFetchUserCount,
   } = useContext(UserDataContext)
 
-  useEffect(() => {
-    fetchUser()
-  }, [])
+  const { setNavTabSelected } = useContext(NavContext)
 
   useEffect(() => {
-    console.log(`user`.user)
+    if (fetchUserCount < 1) {
+      fetchUser()
+      setFetchUserCount(1)
+    }
+  }, [fetchUserCount])
+
+  useEffect(() => {
+    if (user) {
+      const { username } = user
+      if (username === '') {
+        setNavTabSelected('formScreen')
+      }
+    }
   }, [user])
 
   const renderContent = () => {

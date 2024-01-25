@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { Context as MenuContext } from '../../../context/MenuContext'
+import { Context as FormContext } from '../../../context/FormContext'
 
 const Header = () => {
   const {
@@ -10,6 +11,10 @@ const Header = () => {
     setMenuExpanded,
     setUseStaticMenu,
   } = useContext(MenuContext)
+
+  const {
+    state: { formSelected },
+  } = useContext(FormContext)
 
   const toggleMenu = () => {
     if (useStaticMenu) {
@@ -20,7 +25,8 @@ const Header = () => {
     setMenuExpanded(!menuExpanded)
   }
 
-  const renderLoader = () => {
+  const renderContent = () => {
+    if (formSelected === 'initForm') return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>
@@ -32,7 +38,7 @@ const Header = () => {
     )
   }
 
-  return renderLoader()
+  return renderContent()
 }
 
 const styles = StyleSheet.create({

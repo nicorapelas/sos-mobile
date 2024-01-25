@@ -24,7 +24,7 @@ const DevicesNavLink = () => {
     }
   }
 
-  const renderLoader = () => {
+  const renderContent = () => {
     return (
       <TouchableOpacity style={styles.container} onPress={handlePress}>
         <MaterialIcons
@@ -40,7 +40,7 @@ const DevicesNavLink = () => {
     )
   }
 
-  return renderLoader()
+  return renderContent()
 }
 
 const styles = StyleSheet.create({

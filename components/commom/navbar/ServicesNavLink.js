@@ -24,7 +24,7 @@ const ServicesNavLink = () => {
     }
   }
 
-  const renderLoader = () => {
+  const renderContent = () => {
     return (
       <TouchableOpacity style={styles.container} onPress={handlePress}>
         <MaterialIcons
@@ -44,7 +44,7 @@ const ServicesNavLink = () => {
     )
   }
 
-  return renderLoader()
+  return renderContent()
 }
 
 const styles = StyleSheet.create({

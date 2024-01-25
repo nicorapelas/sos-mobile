@@ -7,6 +7,7 @@ import MainContentRender from './MainContentRender'
 
 import { Context as UserDataContext } from '../../../context/UserDataContext'
 import { Context as NavContext } from '../../../context/NavContext'
+import { Context as FormContext } from '../../../context/FormContext'
 
 const MainScreen = () => {
   const [count, setCount] = useState(0)
@@ -19,6 +20,8 @@ const MainScreen = () => {
 
   const { setNavTabSelected } = useContext(NavContext)
 
+  const { setFormSelected } = useContext(FormContext)
+
   useEffect(() => {
     if (fetchUserCount < 1) {
       fetchUser()
@@ -30,6 +33,7 @@ const MainScreen = () => {
     if (user) {
       const { username } = user
       if (username === '') {
+        setFormSelected('initForm')
         setNavTabSelected('formScreen')
       }
     }

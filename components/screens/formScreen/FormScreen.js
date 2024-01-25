@@ -1,34 +1,23 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useContext } from 'react'
 
-import { normalize } from '../../../utils/fontUtils'
+import InitForm from './initForm/InitForm'
+import { Context as FormContext } from '../../../context/FormContext'
 
 const FormScreen = () => {
-  const renderContent = () => {
-    return (
-      <View style={styles.container}>
-        <Text>Form screen</Text>
-      </View>
-    )
+  const {
+    state: { formSelected },
+  } = useContext(FormContext)
+
+  const formSelector = () => {
+    switch (formSelected) {
+      case 'initForm':
+        return <InitForm />
+      default:
+        break
+    }
   }
 
-  return renderContent()
+  return formSelector()
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'yellow',
-  },
-  icon: {
-    color: '#c4c4c2',
-    fontSize: normalize(21),
-    textAlign: 'center',
-  },
-  text: {
-    color: '#c4c4c2',
-    textAlign: 'center',
-    fontSize: normalize(10),
-  },
-})
 
 export default FormScreen

@@ -1,38 +1,53 @@
 import React, { useState, useContext } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView } from 'react-native'
 
-import FormField from '../FormField'
+import FormField from '../elements/FormField'
+import SubmitButton from '../elements/SubmitButton'
+import FormError from '../elements/FormError'
 import { Context as FormContext } from '../../../../context/FormContext'
+import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const InitForm = () => {
   const [name, setName] = useState('')
+
   const {
     state: { formSelected },
+    setError,
   } = useContext(FormContext)
 
-  const instruction = () => {
-    return (
-      <View style={styles.instructionContainer}>
-        <View>
-          <Text style={styles.welcome}>Welcome!</Text>
-          <Text style={styles.instruction}>What should we call you?</Text>
-        </View>
-      </View>
-    )
+  const { editUser } = useContext(UserDataContext)
+
+  const handleSubmit = () => {
+    if (name.length < 1) {
+      setError(`The "Name" field is required.`)
+      return
+    }
+    editUser({ username: name })
   }
 
   const renderContent = () => {
     return (
-      <View style={styles.container}>
-        {instruction()}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        <View style={styles.instructionContainer}>
+          <View>
+            <Text style={styles.welcome}>Welcome!</Text>
+            <Text style={styles.instruction}>What should we call you?</Text>
+          </View>
+        </View>
+        <FormError />
         <FormField
           label="Name"
           value={name}
           onChangeText={setName}
           placeholder="Enter your name"
         />
-      </View>
+        <SubmitButton onPress={handleSubmit} title="Submit" />
+      </KeyboardAvoidingView>
     )
   }
 

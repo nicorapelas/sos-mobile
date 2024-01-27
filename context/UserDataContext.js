@@ -26,6 +26,8 @@ const UserDataReducer = (state, action) => {
       return { ...state, userPhoneNumber: action.payload }
     case 'SET_FETCH_USER_COUNT':
       return { ...state, fetchUserCount: action.payload, loading: false }
+    case 'EDIT_USER':
+      return { ...state, user: action.payload, loading: false }
     default:
       return state
   }
@@ -78,6 +80,19 @@ const setFetchUserCount = (dispatch) => (data) => {
   dispatch({ type: 'SET_FETCH_USER_COUNT', payload: data })
 }
 
+const editUser = (dispatch) => async (data) => {
+  dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.patch('/user/edit-user', data)
+    dispatch({ type: 'EDIT_USER', payload: response.data })
+  } catch (error) {
+    dispatch({
+      type: 'ADD_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   UserDataReducer,
   {
@@ -88,6 +103,7 @@ export const { Provider, Context } = createDataContext(
     setUserPhoneNumber,
     fetchUser,
     setFetchUserCount,
+    editUser,
   },
   {
     loading: false,

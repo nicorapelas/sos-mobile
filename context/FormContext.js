@@ -8,9 +8,7 @@ const FormReducer = (state, action) => {
   switch (action.type) {
     case 'LOADING':
       return { ...state, loading: true }
-    case 'ADD_ERROR':
-      return { ...state, error: action.payload, loading: false }
-    case 'CLEAR_ERROR':
+    case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false }
     case 'SET_FORM_SELECTED':
       return { ...state, formSelected: action.payload }
@@ -27,18 +25,14 @@ const fetchUserIpData = (dispatch) => async () => {
     dispatch({ type: 'FETCH_USER_IP_DATA', payload: response.data })
   } catch (error) {
     dispatch({
-      type: 'ADD_ERROR',
+      type: 'SET_ERROR',
       payload: error,
     })
   }
 }
 
-const addError = (dispatch) => () => {
-  dispatch({ type: 'ADD_ERROR', payload: null })
-}
-
-const clearError = (dispatch) => () => {
-  dispatch({ type: 'CLEAR_ERROR', payload: null })
+const setError = (dispatch) => (error) => {
+  dispatch({ type: 'SET_ERROR', payload: error })
 }
 
 const setFormSelected = (dispatch) => (data) => {
@@ -48,13 +42,12 @@ const setFormSelected = (dispatch) => (data) => {
 export const { Provider, Context } = createDataContext(
   FormReducer,
   {
-    addError,
-    clearError,
+    setError,
     setFormSelected,
   },
   {
     loading: false,
-    error: null,
-    formSelected: null,
+    error: '',
+    formSelected: '',
   }
 )

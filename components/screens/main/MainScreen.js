@@ -10,8 +10,6 @@ import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
 
 const MainScreen = () => {
-  const [count, setCount] = useState(0)
-
   const {
     state: { user, fetchUserCount },
     fetchUser,
@@ -30,11 +28,16 @@ const MainScreen = () => {
   }, [fetchUserCount])
 
   useEffect(() => {
+    console.log(`user: `, user)
     if (user) {
       const { username } = user
       if (username === '') {
         setFormSelected('initForm')
         setNavTabSelected('formScreen')
+        return
+      } else {
+        setFormSelected('')
+        setNavTabSelected('devices')
       }
     }
   }, [user])

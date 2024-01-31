@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import Header from '../../commom/header/Header'
@@ -11,9 +11,7 @@ import { Context as FormContext } from '../../../context/FormContext'
 
 const MainScreen = () => {
   const {
-    state: { user, fetchUserCount },
-    fetchUser,
-    setFetchUserCount,
+    state: { user },
   } = useContext(UserDataContext)
 
   const { setNavTabSelected } = useContext(NavContext)
@@ -21,14 +19,6 @@ const MainScreen = () => {
   const { setFormSelected } = useContext(FormContext)
 
   useEffect(() => {
-    if (fetchUserCount < 1) {
-      fetchUser()
-      setFetchUserCount(1)
-    }
-  }, [fetchUserCount])
-
-  useEffect(() => {
-    console.log(`user: `, user)
     if (user) {
       const { username } = user
       if (username === '') {
@@ -37,6 +27,7 @@ const MainScreen = () => {
         return
       } else {
         setFormSelected('')
+        // HERE: Start intro tour
         setNavTabSelected('devices')
       }
     }

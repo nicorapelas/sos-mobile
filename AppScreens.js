@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar'
 
 import { Context as AppContext } from './context/AppContext'
 import { Context as AuthContext } from './context/AuthContext'
-import IpData from './components/data/IpData'
+import InitFetchCollections from './components/data/InitFetchCollections'
 import AppLoadingCheck from './components/commom/loader/AppLoadingCheck'
 import Loader from './components/commom/loader/Loader'
 import Login from './components/screens/authScreens/login/Login'
@@ -64,7 +64,7 @@ export default function AppScreens() {
 
   return (
     <>
-      <IpData />
+      <InitFetchCollections />
       <AppLoadingCheck />
       {renderContent()}
     </>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 
 import { Context as AuthContext } from '../../../../context/AuthContext'
@@ -11,10 +11,6 @@ const LoginStatus = () => {
     verifyOtp,
     clearStatus,
   } = useContext(AuthContext)
-
-  useEffect(() => {
-    console.log(`otpCode:`, otpCode)
-  }, [otpCode])
 
   const {
     state: { userPhoneNumber },

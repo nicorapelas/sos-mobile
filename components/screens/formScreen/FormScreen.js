@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 
 import InitForm from './initForm/InitForm'
+import CreateCommunityForm from './communityForms/CreateCommunityForm'
 import { Context as FormContext } from '../../../context/FormContext'
 
 const FormScreen = () => {
@@ -12,6 +13,8 @@ const FormScreen = () => {
     switch (formSelected) {
       case 'initForm':
         return <InitForm />
+      case 'createCommunityForm':
+        return <CreateCommunityForm />
       default:
         break
     }

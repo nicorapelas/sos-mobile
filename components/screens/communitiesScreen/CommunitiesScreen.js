@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
-import CreateCommunity from './CreateCommunity'
+import CreateCommunity from './createCommunity/CreateCommunity'
 
 const CommunitiesScreen = () => {
   const renderContent = () => {

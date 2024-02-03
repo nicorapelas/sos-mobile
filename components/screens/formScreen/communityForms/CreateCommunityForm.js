@@ -5,22 +5,22 @@ import FormField from '../elements/FormField'
 import SubmitButton from '../elements/SubmitButton'
 import FormError from '../elements/FormError'
 import { Context as FormContext } from '../../../../context/FormContext'
-import { Context as UserDataContext } from '../../../../context/UserDataContext'
+import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { normalize } from '../../../../utils/fontUtils'
 
-const InitForm = () => {
+const CreateCommunityForm = () => {
   const [name, setName] = useState('')
 
   const { setError } = useContext(FormContext)
 
-  const { editUser } = useContext(UserDataContext)
+  const { createCommunity } = useContext(CommunityContext)
 
   const handleSubmit = () => {
     if (name.length < 1) {
       setError(`The "Name" field is required.`)
       return
     }
-    editUser({ username: name })
+    createCommunity({ username: name })
   }
 
   const renderContent = () => {
@@ -32,8 +32,7 @@ const InitForm = () => {
       >
         <View style={styles.instructionContainer}>
           <View>
-            <Text style={styles.welcome}>Welcome!</Text>
-            <Text style={styles.instruction}>What should we call you?</Text>
+            <Text style={styles.instruction}>Community name</Text>
           </View>
         </View>
         <FormError />
@@ -41,7 +40,7 @@ const InitForm = () => {
           label="Name"
           value={name}
           onChangeText={setName}
-          placeholder="Enter your name"
+          placeholder="Enter community name"
         />
         <SubmitButton onPress={handleSubmit} title="Submit" />
       </KeyboardAvoidingView>
@@ -76,4 +75,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default InitForm
+export default CreateCommunityForm

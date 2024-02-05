@@ -20,7 +20,7 @@ const CreateCommunityForm = () => {
       setError(`The "Name" field is required.`)
       return
     }
-    createCommunity({ username: name })
+    createCommunity({ name })
   }
 
   const renderContent = () => {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#ffff',
     flex: 1,
-    justifyContent: 'center',
+    marginTop: '20%',
   },
   instructionContainer: {
     flexDirection: 'row',

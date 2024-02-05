@@ -48,7 +48,6 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'pink',
     flex: 80,
     flexDirection: 'column',
     justifyContent: 'center',

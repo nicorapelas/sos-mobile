@@ -39,7 +39,6 @@ const MainContentRender = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'yellow',
     flex: 63,
   },
 })

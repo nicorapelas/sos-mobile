@@ -1,19 +1,19 @@
 import React, { useContext } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import DevicesNavLink from './DevicesNavLink'
 import CommunitiesNavLink from './CommunitiesNavLink'
 import ServicesNavLink from './ServicesNavLink'
 import NotificationsNavLink from './NotificationsNavLink'
-import { Context as FormContext } from '../../../context/FormContext'
+import { Context as NavContext } from '../../../context/NavContext'
 
 const Navbar = () => {
   const {
-    state: { formSelected },
-  } = useContext(FormContext)
+    state: { navTabSelected },
+  } = useContext(NavContext)
 
   const renderContent = () => {
-    if (formSelected === 'initForm') return null
+    if (navTabSelected === 'formScreen') return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>

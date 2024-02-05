@@ -5,16 +5,27 @@ import Menu from '../../commom/menu/Menu'
 import CreateCommunity from './createCommunity/CreateCommunity'
 
 const CommunitiesScreen = () => {
+  // const renderContent = () => {
+  //   return (
+  //     <>
+  //       <View style={styles.menuWrapper}>
+  //         <Menu />
+  //       </View>
+  //       <View style={styles.container}>
+  //         <CreateCommunity />
+  //       </View>
+  //     </>
+  //   )
+  // }
+
   const renderContent = () => {
     return (
-      <>
+      <View style={styles.container}>
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
-        <View style={styles.container}>
-          <CreateCommunity />
-        </View>
-      </>
+        <CreateCommunity />
+      </View>
     )
   }
 

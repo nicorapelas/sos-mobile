@@ -1,11 +1,16 @@
-import React, { useContext } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { Context as MenuContext } from '../../../context/MenuContext'
+import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
+import { normalize } from '../../../utils/fontUtils'
 
 const Header = () => {
+  const [returnTab, setReturnTab] = useState('')
+  const [formLabel, setFormLabel] = useState('')
+
   const {
     state: { menuExpanded, useStaticMenu },
     setMenuExpanded,
@@ -13,8 +18,25 @@ const Header = () => {
   } = useContext(MenuContext)
 
   const {
+    state: { navTabSelected },
+    setNavTabSelected,
+  } = useContext(NavContext)
+
+  const {
     state: { formSelected },
+    setFormSelected,
   } = useContext(FormContext)
+
+  useEffect(() => {
+    switch (formSelected) {
+      case 'createCommunityForm':
+        setFormLabel('CREATE COMMUNITY')
+        setReturnTab('communities')
+        break
+      default:
+        break
+    }
+  }, [formSelected])
 
   const toggleMenu = () => {
     if (useStaticMenu) {
@@ -25,14 +47,55 @@ const Header = () => {
     setMenuExpanded(!menuExpanded)
   }
 
+  const handleCancel = () => {
+    setNavTabSelected(returnTab)
+    setFormLabel('')
+    setFormSelected('')
+  }
+
+  const renderCancelButton = () => {
+    return (
+      <View style={styles.cancelButton}>
+        {navTabSelected !== 'formScreen' ? null : (
+          <TouchableOpacity onPress={handleCancel}>
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    )
+  }
+
+  const renderLabel = () => {
+    return (
+      <View style={styles.labelBedA}>
+        <View style={styles.labelBedB}>
+          {navTabSelected !== 'formScreen' ? null : (
+            <Text style={styles.formLabel}>{formLabel}</Text>
+          )}
+        </View>
+      </View>
+    )
+  }
+
+  const renderMenuButton = () => {
+    return (
+      <View style={styles.menuButton}>
+        {navTabSelected === 'formScreen' ? null : (
+          <TouchableOpacity onPress={toggleMenu}>
+            <MaterialIcons style={styles.menuIcon} name="menu" />
+          </TouchableOpacity>
+        )}
+      </View>
+    )
+  }
+
   const renderContent = () => {
-    if (formSelected === 'initForm') return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>
-          <TouchableOpacity onPress={toggleMenu}>
-            <MaterialIcons style={styles.icon} name="menu" />
-          </TouchableOpacity>
+          {renderCancelButton()}
+          {renderLabel()}
+          {renderMenuButton()}
         </View>
       </View>
     )
@@ -49,12 +112,34 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+  },
+  cancelButton: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  cancelButtonText: {
+    paddingLeft: 5,
+  },
+  menuButton: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  icon: {
+  menuIcon: {
     color: 'black',
     fontSize: 32,
     paddingRight: 5,
+  },
+  labelBedA: {
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  labelBedB: {
+    justifyContent: 'center',
+  },
+  formLabel: {
+    fontWeight: '700',
   },
 })
 

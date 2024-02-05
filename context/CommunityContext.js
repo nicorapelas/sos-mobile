@@ -31,11 +31,11 @@ const fetchCommunity = (dispatch) => async () => {
   }
 }
 
-const createCommunity = (dispatch) => async () => {
+const createCommunity = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
-    const response = await ngrokApi.post('/community/create')
-    console.log(`response:`, response)
+    const response = await ngrokApi.post('/community/create', data)
+    console.log(`response:`, response.data)
     if (response.data.error) {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return

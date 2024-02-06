@@ -6,37 +6,19 @@ import Navbar from '../../commom/navbar/NavBar'
 import MainContentRender from './MainContentRender'
 
 import { Context as UserDataContext } from '../../../context/UserDataContext'
-import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
 
 const MainScreen = () => {
+  const {} = useContext(UserDataContext)
+
   const {
-    state: { user },
-  } = useContext(UserDataContext)
-
-  const { setNavTabSelected } = useContext(NavContext)
-
-  const { setFormSelected } = useContext(FormContext)
-
-  useEffect(() => {
-    if (user) {
-      const { username } = user
-      if (username === '') {
-        setFormSelected('initForm')
-        setNavTabSelected('formScreen')
-        return
-      } else {
-        setFormSelected('')
-        // HERE: Start intro tour
-        setNavTabSelected('devices')
-      }
-    }
-  }, [user])
+    state: { formSelected },
+  } = useContext(FormContext)
 
   const renderContent = () => {
     return (
       <View style={styles.container}>
-        <Header />
+        {formSelected === 'initForm' ? null : <Header />}
         <MainContentRender />
         <Navbar />
       </View>

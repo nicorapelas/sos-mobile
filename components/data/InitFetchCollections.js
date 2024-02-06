@@ -1,15 +1,19 @@
 import { useContext, useEffect } from 'react'
 
+import { Context as AuthContext } from '../../context/AuthContext'
 import { Context as UserDataContext } from '../../context/UserDataContext'
 import { Context as CommunityContext } from '../../context/CommunityContext'
 
 const InitFetchCollections = () => {
   const {
-    state: { user, userIpData, fetchUserCount },
+    state: { tokenValid },
+  } = useContext(AuthContext)
+
+  const {
+    state: { user, userIpData },
     fetchUserIpData,
     setUserCountryIpData,
     fetchUser,
-    setFetchUserCount,
   } = useContext(UserDataContext)
 
   const {
@@ -19,34 +23,32 @@ const InitFetchCollections = () => {
 
   useEffect(() => {
     fetchUserIpData()
-    fetchCommunity()
     return () => {
       fetchUserIpData
-      fetchCommunity
     }
   }, [])
+
+  useEffect(() => {
+    if (tokenValid) {
+      fetchUser()
+      return () => fetchUser
+    }
+  }, [tokenValid])
+
+  useEffect(() => {
+    if (user) {
+      return () => {
+        fetchCommunity
+      }
+    }
+    fetchCommunity()
+  }, [user])
 
   useEffect(() => {
     if (userIpData) {
       setUserCountryIpData(userIpData.country)
     }
   }, [userIpData])
-
-  useEffect(() => {
-    fetchUser()
-    return () => fetchUser
-  }, [])
-
-  useEffect(() => {
-    console.log('community', community)
-  }, [community])
-
-  // useEffect(() => {
-  //   if (fetchUserCount < 1) {
-  //     fetchUser()
-  //     setFetchUserCount(1)
-  //   }
-  // }, [fetchUserCount])
 
   return null
 }

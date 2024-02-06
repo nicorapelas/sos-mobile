@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 
 import { Context as FormContext } from '../../../../context/FormContext'
+import { Context as CommunityContext } from '../../../../context/CommunityContext'
 
 const FormField = ({
   label,
@@ -10,7 +11,14 @@ const FormField = ({
   placeholder,
   ...textInputProps
 }) => {
-  const { setError } = useContext(FormContext)
+  const { setError: setFormError } = useContext(FormContext)
+
+  const { setError: setCommunityError } = useContext(CommunityContext)
+
+  const resetErrors = () => {
+    setFormError('')
+    setCommunityError('')
+  }
 
   return (
     <View style={styles.container}>
@@ -20,8 +28,8 @@ const FormField = ({
         onChangeText={onChangeText}
         value={value}
         placeholder={placeholder}
-        onFocus={() => setError('')}
-        onChange={() => setError('')}
+        onFocus={resetErrors}
+        onChange={resetErrors}
         {...textInputProps}
       />
     </View>

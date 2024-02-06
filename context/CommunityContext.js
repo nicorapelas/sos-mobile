@@ -8,6 +8,10 @@ const CommunityReducer = (state, action) => {
       return { ...state, loading: true }
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false }
+    case 'SET_SUCCESS':
+      return { ...state, success: action.payload, loading: false }
+    case 'SET_SUCCESS':
+      return { ...state, success: action.payload }
     case 'FETCH_COMMUNITY':
       return { ...state, community: action.payload, loading: false }
     case 'CREATE_COMMUNITY':
@@ -41,6 +45,7 @@ const createCommunity = (dispatch) => async (data) => {
       return
     }
     dispatch({ type: 'CREATE_COMMUNITY', payload: response.data })
+    dispatch({ type: 'SET_SUCCESS', payload: 'communityCreatedSuccefully' })
     return
   } catch (error) {
     dispatch({
@@ -54,16 +59,22 @@ const setError = (dispatch) => (error) => {
   dispatch({ type: 'SET_ERROR', payload: error })
 }
 
+const setSuccess = (dispatch) => (success) => {
+  dispatch({ type: 'SET_SUCCESS', payload: success })
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
     setError,
+    setSuccess,
     fetchCommunity,
     createCommunity,
   },
   {
     loading: false,
     error: '',
+    success: '',
     community: [],
   }
 )

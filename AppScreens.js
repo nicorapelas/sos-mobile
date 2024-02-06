@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import { Context as AppContext } from './context/AppContext'
 import { Context as AuthContext } from './context/AuthContext'
 import InitFetchCollections from './components/data/InitFetchCollections'
+import DataDrvRedirecting from './components/data/DataDrvRedirecting'
 import AppLoadingCheck from './components/commom/loader/AppLoadingCheck'
 import Loader from './components/commom/loader/Loader'
 import Login from './components/screens/authScreens/login/Login'
@@ -65,6 +66,7 @@ export default function AppScreens() {
   return (
     <>
       <InitFetchCollections />
+      <DataDrvRedirecting />
       <AppLoadingCheck />
       {renderContent()}
     </>

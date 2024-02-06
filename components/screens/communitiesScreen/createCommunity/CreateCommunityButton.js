@@ -16,7 +16,6 @@ const CreateCommunityButton = () => {
   } = useContext(MenuContext)
 
   const handleClick = () => {
-    console.log(`hello world`)
     setFormSelected('createCommunityForm')
     setNavTabSelected('formScreen')
   }

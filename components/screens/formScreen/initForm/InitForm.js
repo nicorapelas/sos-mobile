@@ -53,7 +53,6 @@ const InitForm = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffff',
     flex: 1,
     justifyContent: 'center',
   },

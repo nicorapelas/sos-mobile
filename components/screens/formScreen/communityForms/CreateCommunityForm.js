@@ -30,12 +30,12 @@ const CreateCommunityForm = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
       >
+        <FormError />
         <View style={styles.instructionContainer}>
           <View>
             <Text style={styles.instruction}>Community name</Text>
           </View>
         </View>
-        <FormError />
         <FormField
           label="Name"
           value={name}

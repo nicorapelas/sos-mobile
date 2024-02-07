@@ -3,21 +3,9 @@ import { View, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
 import CreateCommunity from './createCommunity/CreateCommunity'
+import CommunityList from './communityList/CommunityList'
 
 const CommunitiesScreen = () => {
-  // const renderContent = () => {
-  //   return (
-  //     <>
-  //       <View style={styles.menuWrapper}>
-  //         <Menu />
-  //       </View>
-  //       <View style={styles.container}>
-  //         <CreateCommunity />
-  //       </View>
-  //     </>
-  //   )
-  // }
-
   const renderContent = () => {
     return (
       <View style={styles.container}>
@@ -25,6 +13,7 @@ const CommunitiesScreen = () => {
           <Menu />
         </View>
         <CreateCommunity />
+        <CommunityList />
       </View>
     )
   }

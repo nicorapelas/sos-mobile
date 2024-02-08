@@ -12,39 +12,28 @@ const CommunityReducer = (state, action) => {
       return { ...state, success: action.payload, loading: false }
     case 'SET_SUCCESS':
       return { ...state, success: action.payload }
-    case 'FETCH_COMMUNITY':
-      return { ...state, community: action.payload, loading: false }
-    case 'CREATE_COMMUNITY':
-      return { ...state, community: action.payload, loading: false }
+    case 'SET_COMMUNITY_LIST':
+      return { ...state, communityList: action.payload }
+    case 'ADD_COMMUNITY':
+      return {
+        ...state,
+        communityList: [...state.communityList, action.payload],
+      }
     default:
       return state
   }
 }
 
 // Actions
-const fetchCommunity = (dispatch) => async () => {
-  dispatch({ type: 'LOADING' })
-  try {
-    const response = await ngrokApi.get('/community/fetch')
-    dispatch({ type: 'FETCH_COMMUNITY', payload: response.data })
-  } catch (error) {
-    dispatch({
-      type: 'SET_ERROR',
-      payload: error,
-    })
-  }
-}
-
 const createCommunity = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/create', data)
-    console.log(`response:`, response.data)
     if (response.data.error) {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return
     }
-    dispatch({ type: 'CREATE_COMMUNITY', payload: response.data })
+    dispatch({ type: 'ADD_COMMUNITY', payload: response.data })
     dispatch({ type: 'SET_SUCCESS', payload: 'communityCreatedSuccefully' })
     return
   } catch (error) {
@@ -63,18 +52,22 @@ const setSuccess = (dispatch) => (success) => {
   dispatch({ type: 'SET_SUCCESS', payload: success })
 }
 
+const setCommunityList = (dispatch) => (data) => {
+  dispatch({ type: 'SET_COMMUNITY_LIST', payload: data })
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
     setError,
     setSuccess,
-    fetchCommunity,
     createCommunity,
+    setCommunityList,
   },
   {
     loading: false,
     error: '',
     success: '',
-    community: [],
+    communityList: [],
   }
 )

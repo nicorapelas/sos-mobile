@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, StyleSheet } from 'react-native'
 
+import { Context as CommunityContext } from '../../../context/CommunityContext'
 import Menu from '../../commom/menu/Menu'
 import CreateCommunity from './createCommunity/CreateCommunity'
 import CommunityList from './communityList/CommunityList'
+import CommunitySelected from './communitySelected/CommunitySelected'
 
 const CommunitiesScreen = () => {
+  const {
+    state: { communitySelected },
+  } = useContext(CommunityContext)
+
   const renderContent = () => {
+    if (communitySelected) return <CommunitySelected />
     return (
       <View style={styles.container}>
         <View style={styles.menuWrapper}>

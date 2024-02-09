@@ -42,10 +42,6 @@ const DataDrvRedirecting = () => {
     }
   }, [communitySuccess])
 
-  useEffect(() => {
-    console.log(`communitySuccess:`, communitySuccess)
-  }, [communitySuccess])
-
   return null
 }
 

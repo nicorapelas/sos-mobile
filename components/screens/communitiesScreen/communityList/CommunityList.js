@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons'
 
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
+import { Context as MenuContext } from '../../../../context/MenuContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityList = () => {
@@ -14,7 +15,12 @@ const CommunityList = () => {
   const {
     state: { communityList },
     setCommunityList,
+    fetchSelectedCommunity,
   } = useContext(CommunityContext)
+
+  const {
+    state: { menuExpanded, useStaticMenu },
+  } = useContext(MenuContext)
 
   useEffect(() => {
     if (user && user.community && user.community.length > 0) {
@@ -28,12 +34,24 @@ const CommunityList = () => {
     }
   }, [user])
 
+  const handlePress = (id) => {
+    fetchSelectedCommunity(id)
+  }
+
+  const containerStyle = [
+    styles.container,
+    !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
+  ]
+
   const renderList = () => {
     if (communityList.length < 1) return null
-
     return communityList.map((com) => {
       return (
-        <TouchableOpacity key={com._id} style={styles.listItem}>
+        <TouchableOpacity
+          key={com._id}
+          style={containerStyle}
+          onPress={() => handlePress({ id: com.communityId })}
+        >
           <View style={styles.left}>
             <FontAwesome style={styles.avatarPlaceHolder} name="group" />
           </View>
@@ -54,7 +72,7 @@ const CommunityList = () => {
 }
 
 const styles = StyleSheet.create({
-  listItem: {
+  container: {
     backgroundColor: '#ffff',
     flexDirection: 'row',
     marginVertical: 5,
@@ -67,7 +85,7 @@ const styles = StyleSheet.create({
   },
   avatarPlaceHolder: {
     color: '#c4c4c2',
-    fontSize: normalize(50),
+    fontSize: normalize(47),
   },
   middle: {
     flex: 2,

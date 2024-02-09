@@ -19,6 +19,8 @@ const CommunityReducer = (state, action) => {
         ...state,
         communityList: [...state.communityList, action.payload],
       }
+    case 'FETCH_COMMUNITY_SELECTED':
+      return { ...state, communitySelected: action.payload, loading: false }
     default:
       return state
   }
@@ -56,6 +58,20 @@ const setCommunityList = (dispatch) => (data) => {
   dispatch({ type: 'SET_COMMUNITY_LIST', payload: data })
 }
 
+const fetchSelectedCommunity = (dispatch) => async (data) => {
+  dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post('/community/fetch-selected', data)
+    dispatch({ type: 'FETCH_COMMUNITY_SELECTED', payload: response.data })
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -63,11 +79,13 @@ export const { Provider, Context } = createDataContext(
     setSuccess,
     createCommunity,
     setCommunityList,
+    fetchSelectedCommunity,
   },
   {
     loading: false,
     error: '',
     success: '',
     communityList: [],
+    communitySelected: null,
   }
 )

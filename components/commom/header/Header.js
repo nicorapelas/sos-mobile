@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Context as MenuContext } from '../../../context/MenuContext'
 import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
-import { normalize } from '../../../utils/fontUtils'
+import { Context as CommunityContext } from '../../../context/CommunityContext'
 
 const Header = () => {
   const [returnTab, setReturnTab] = useState('')
@@ -26,6 +26,10 @@ const Header = () => {
     state: { formSelected },
     setFormSelected,
   } = useContext(FormContext)
+
+  const {
+    state: { communitySelected },
+  } = useContext(CommunityContext)
 
   useEffect(() => {
     switch (formSelected) {
@@ -90,6 +94,7 @@ const Header = () => {
   }
 
   const renderContent = () => {
+    if (communitySelected) return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>

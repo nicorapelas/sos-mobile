@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons'
 
 import { Context as MenuContext } from '../../../context/MenuContext'
 import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
 import { Context as CommunityContext } from '../../../context/CommunityContext'
+import { normalize } from '../../../utils/fontUtils'
 
 const Header = () => {
   const [returnTab, setReturnTab] = useState('')
@@ -57,6 +58,20 @@ const Header = () => {
     setFormSelected('')
   }
 
+  const renderBackButton = () => {
+    if (!communitySelected) return null
+    return (
+      <TouchableOpacity style={styles.backButon}>
+        <View style={styles.backIconContainer}>
+          <FontAwesome name="angle-left" style={styles.backIcon} />
+        </View>
+        <View style={styles.backTextContainer}>
+          <Text style={styles.backText}>Back</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
   const renderCancelButton = () => {
     return (
       <View style={styles.cancelButton}>
@@ -84,7 +99,7 @@ const Header = () => {
   const renderMenuButton = () => {
     return (
       <View style={styles.menuButton}>
-        {navTabSelected === 'formScreen' ? null : (
+        {navTabSelected === 'formScreen' || communitySelected ? null : (
           <TouchableOpacity onPress={toggleMenu}>
             <MaterialIcons style={styles.menuIcon} name="menu" />
           </TouchableOpacity>
@@ -94,10 +109,10 @@ const Header = () => {
   }
 
   const renderContent = () => {
-    if (communitySelected) return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>
+          {renderBackButton()}
           {renderCancelButton()}
           {renderLabel()}
           {renderMenuButton()}
@@ -132,7 +147,7 @@ const styles = StyleSheet.create({
   },
   menuIcon: {
     color: 'black',
-    fontSize: 32,
+    fontSize: normalize(30),
     paddingRight: 5,
   },
   labelBedA: {
@@ -145,6 +160,25 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     fontWeight: '700',
+  },
+  backButon: {
+    flexDirection: 'row',
+  },
+  backIconContainer: {},
+  backIcon: {
+    color: 'black',
+    fontSize: normalize(30),
+    paddingLeft: 5,
+  },
+  backTextContainer: {
+    justifyContent: 'center',
+    marginLeft: 6,
+  },
+  backText: {
+    color: 'black',
+    fontSize: normalize(13),
+    fontWeight: '600',
+    paddingLeft: 5,
   },
 })
 

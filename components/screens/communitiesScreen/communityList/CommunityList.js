@@ -46,6 +46,7 @@ const CommunityList = () => {
   const renderList = () => {
     if (communityList.length < 1) return null
     return communityList.map((com) => {
+      console.log(`com`, com)
       return (
         <TouchableOpacity
           key={com._id}
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     flex: 2,
+    justifyContent: 'center',
   },
   name: {
     fontSize: normalize(14),

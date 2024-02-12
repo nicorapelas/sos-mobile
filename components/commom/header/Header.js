@@ -1,22 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { MaterialIcons, FontAwesome } from '@expo/vector-icons'
 
-import { Context as MenuContext } from '../../../context/MenuContext'
+import HeaderBackButton from './HeaderBackButton'
+import HeaderMenuButton from './HeaderMenuButton'
 import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
-import { Context as CommunityContext } from '../../../context/CommunityContext'
-import { normalize } from '../../../utils/fontUtils'
 
 const Header = () => {
   const [returnTab, setReturnTab] = useState('')
   const [formLabel, setFormLabel] = useState('')
-
-  const {
-    state: { menuExpanded, useStaticMenu },
-    setMenuExpanded,
-    setUseStaticMenu,
-  } = useContext(MenuContext)
 
   const {
     state: { navTabSelected },
@@ -27,10 +19,6 @@ const Header = () => {
     state: { formSelected },
     setFormSelected,
   } = useContext(FormContext)
-
-  const {
-    state: { communitySelected },
-  } = useContext(CommunityContext)
 
   useEffect(() => {
     switch (formSelected) {
@@ -43,33 +31,10 @@ const Header = () => {
     }
   }, [formSelected])
 
-  const toggleMenu = () => {
-    if (useStaticMenu) {
-      setUseStaticMenu(false)
-      setMenuExpanded(false)
-      return
-    }
-    setMenuExpanded(!menuExpanded)
-  }
-
   const handleCancel = () => {
     setNavTabSelected(returnTab)
     setFormLabel('')
     setFormSelected('')
-  }
-
-  const renderBackButton = () => {
-    if (!communitySelected) return null
-    return (
-      <TouchableOpacity style={styles.backButon}>
-        <View style={styles.backIconContainer}>
-          <FontAwesome name="angle-left" style={styles.backIcon} />
-        </View>
-        <View style={styles.backTextContainer}>
-          <Text style={styles.backText}>Back</Text>
-        </View>
-      </TouchableOpacity>
-    )
   }
 
   const renderCancelButton = () => {
@@ -96,26 +61,14 @@ const Header = () => {
     )
   }
 
-  const renderMenuButton = () => {
-    return (
-      <View style={styles.menuButton}>
-        {navTabSelected === 'formScreen' || communitySelected ? null : (
-          <TouchableOpacity onPress={toggleMenu}>
-            <MaterialIcons style={styles.menuIcon} name="menu" />
-          </TouchableOpacity>
-        )}
-      </View>
-    )
-  }
-
   const renderContent = () => {
     return (
       <View style={styles.container}>
         <View style={styles.row}>
-          {renderBackButton()}
+          <HeaderBackButton />
           {renderCancelButton()}
           {renderLabel()}
-          {renderMenuButton()}
+          <HeaderMenuButton />
         </View>
       </View>
     )
@@ -140,16 +93,6 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     paddingLeft: 5,
   },
-  menuButton: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  menuIcon: {
-    color: 'black',
-    fontSize: normalize(30),
-    paddingRight: 5,
-  },
   labelBedA: {
     flex: 3,
     flexDirection: 'row',
@@ -157,28 +100,6 @@ const styles = StyleSheet.create({
   },
   labelBedB: {
     justifyContent: 'center',
-  },
-  formLabel: {
-    fontWeight: '700',
-  },
-  backButon: {
-    flexDirection: 'row',
-  },
-  backIconContainer: {},
-  backIcon: {
-    color: 'black',
-    fontSize: normalize(30),
-    paddingLeft: 5,
-  },
-  backTextContainer: {
-    justifyContent: 'center',
-    marginLeft: 6,
-  },
-  backText: {
-    color: 'black',
-    fontSize: normalize(13),
-    fontWeight: '600',
-    paddingLeft: 5,
   },
 })
 

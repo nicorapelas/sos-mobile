@@ -21,6 +21,14 @@ const CommunityReducer = (state, action) => {
       }
     case 'FETCH_COMMUNITY_SELECTED':
       return { ...state, communitySelected: action.payload, loading: false }
+    case 'SET_COMMUNITY_SELECTED':
+      return { ...state, communitySelected: action.payload }
+    case 'FETCH_COMMUNITY_SELECTED_ADMIN':
+      return {
+        ...state,
+        communitySelectedAdmin: action.payload,
+        loading: false,
+      }
     default:
       return state
   }
@@ -72,6 +80,29 @@ const fetchSelectedCommunity = (dispatch) => async (data) => {
   }
 }
 
+const setCommunitySelected = (dispatch) => (data) => {
+  dispatch({ type: 'SET_COMMUNITY_SELECTED', payload: data })
+}
+
+const fetchSelectedCommunityAdmin = (dispatch) => async (data) => {
+  dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post(
+      '/community/fetch-community-selected-admin',
+      data
+    )
+    dispatch({
+      type: 'FETCH_COMMUNITY_SELECTED_ADMIN',
+      payload: response.data,
+    })
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -80,6 +111,8 @@ export const { Provider, Context } = createDataContext(
     createCommunity,
     setCommunityList,
     fetchSelectedCommunity,
+    setCommunitySelected,
+    fetchSelectedCommunityAdmin,
   },
   {
     loading: false,
@@ -87,5 +120,6 @@ export const { Provider, Context } = createDataContext(
     success: '',
     communityList: [],
     communitySelected: null,
+    communitySelectedAdmin: null,
   }
 )

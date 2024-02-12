@@ -13,14 +13,13 @@ const CommunitiesScreen = () => {
   } = useContext(CommunityContext)
 
   const renderContent = () => {
-    if (communitySelected) return <CommunitySelected />
     return (
       <View style={styles.container}>
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
         <CreateCommunity />
-        <CommunityList />
+        {/* <CommunitySelected /> */}
       </View>
     )
   }

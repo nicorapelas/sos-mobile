@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { Context as AuthContext } from '../../context/AuthContext'
 import { Context as UserDataContext } from '../../context/UserDataContext'
+import { Context as CommunityContext } from '../../context/CommunityContext'
 
 const InitFetchCollections = () => {
   const {
@@ -14,6 +15,11 @@ const InitFetchCollections = () => {
     setUserCountryIpData,
     fetchUser,
   } = useContext(UserDataContext)
+
+  const {
+    state: { communitySelected },
+    fetchSelectedCommunityAdmin,
+  } = useContext(CommunityContext)
 
   useEffect(() => {
     fetchUserIpData()
@@ -32,6 +38,12 @@ const InitFetchCollections = () => {
       setUserCountryIpData(userIpData.country)
     }
   }, [userIpData])
+
+  useEffect(() => {
+    if (communitySelected) {
+      fetchSelectedCommunityAdmin({ adminId: communitySelected.adminId })
+    }
+  }, [communitySelected])
 
   return null
 }

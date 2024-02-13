@@ -1,0 +1,9 @@
+{
+  "_id": { "$oid": "65c9de92484c2aa5bc8136a1" },
+  "_user": { "$oid": "65c24805053a655e8eda8f0a" },
+  "name": "Block D",
+  "adminId": "65c24805053a655e8eda8f0a",
+  "avatar": "",
+  "date": { "$date": { "$numberLong": "1707728530382" } },
+  "__v": { "$numberInt": "0" }
+}

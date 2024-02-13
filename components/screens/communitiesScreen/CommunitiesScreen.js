@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 
 import { Context as CommunityContext } from '../../../context/CommunityContext'
 import Menu from '../../commom/menu/Menu'
@@ -9,17 +9,20 @@ import CommunitySelected from './communitySelected/CommunitySelected'
 
 const CommunitiesScreen = () => {
   const {
-    state: { communitySelected },
+    state: { communitySelected, communitySelectedAdmin },
   } = useContext(CommunityContext)
 
   const renderContent = () => {
+    if (communitySelected && communitySelectedAdmin) {
+      return <CommunitySelected />
+    }
     return (
       <View style={styles.container}>
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
         <CreateCommunity />
-        {/* <CommunitySelected /> */}
+        <CommunityList />
       </View>
     )
   }

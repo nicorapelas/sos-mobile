@@ -12,6 +12,8 @@ const CommunityReducer = (state, action) => {
       return { ...state, success: action.payload, loading: false }
     case 'SET_SUCCESS':
       return { ...state, success: action.payload }
+    case 'SET_RETRY':
+      return { ...state, retry: action.payload }
     case 'SET_COMMUNITY_LIST':
       return { ...state, communityList: action.payload }
     case 'ADD_COMMUNITY':
@@ -29,6 +31,8 @@ const CommunityReducer = (state, action) => {
         communitySelectedAdmin: action.payload,
         loading: false,
       }
+    case 'SET_COMMUNITY_INVITE':
+      return { ...state, communityInvite: action.payload, loading: false }
     default:
       return state
   }
@@ -60,6 +64,10 @@ const setError = (dispatch) => (error) => {
 
 const setSuccess = (dispatch) => (success) => {
   dispatch({ type: 'SET_SUCCESS', payload: success })
+}
+
+const setRetry = (dispatch) => (error) => {
+  dispatch({ type: 'SET_RETRY', payload: error })
 }
 
 const setCommunityList = (dispatch) => (data) => {
@@ -103,23 +111,49 @@ const fetchSelectedCommunityAdmin = (dispatch) => async (data) => {
   }
 }
 
+const createCommunityInvite = (dispatch) => async (data) => {
+  dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post(
+      '/community/create-community-invite',
+      data
+    )
+    console.log('response', response.data)
+    if (response.data.retry) {
+      dispatch({ type: 'SET_RETRY', payload: response.data.retry })
+      return
+    }
+    dispatch({ type: 'SET_COMMUNITY_INVITE', payload: response.data })
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
     setError,
     setSuccess,
+    setRetry,
     createCommunity,
     setCommunityList,
     fetchSelectedCommunity,
     setCommunitySelected,
     fetchSelectedCommunityAdmin,
+    createCommunityInvite,
   },
   {
     loading: false,
     error: '',
     success: '',
+    retry: false,
     communityList: [],
     communitySelected: null,
     communitySelectedAdmin: null,
+    communityInvite: null,
   }
 )

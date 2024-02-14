@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
 
+import CommunitySelectedAdminBar from '../communityAdmin/CommunitySelectedAdimBar'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { normalize } from '../../../../utils/fontUtils'
 
@@ -11,13 +12,10 @@ const CommunitySelected = () => {
     state: { communitySelected, communitySelectedAdmin },
   } = useContext(CommunityContext)
 
-  useEffect(() => {
-    console.log(communitySelectedAdmin)
-  }, [communitySelectedAdmin])
-
   const renderContent = () => {
     return (
       <View style={styles.container}>
+        <CommunitySelectedAdminBar />
         <View style={styles.avatar}>
           <FontAwesome style={styles.avatarPlaceHolder} name="group" />
         </View>

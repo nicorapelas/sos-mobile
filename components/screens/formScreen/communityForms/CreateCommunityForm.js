@@ -39,7 +39,7 @@ const CreateCommunityForm = () => {
         <FormField
           label="Name"
           value={name}
-          onChangeText={setName}
+          onChangeText={(text) => setName(text.substring(0, 20))}
           placeholder="Enter community name"
         />
         <SubmitButton onPress={handleSubmit} title="Submit" />

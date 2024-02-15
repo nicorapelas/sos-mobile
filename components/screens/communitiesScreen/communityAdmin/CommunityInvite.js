@@ -1,18 +1,22 @@
-import React, { useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
+import CommunityInvitation from './CommunityInvitation'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityInvite = () => {
+  const [showInvitation, setShowInvitation] = useState(false)
+
   const {
-    state: { communitySelected, retry },
+    state: { communitySelected, retry, communityInvite },
     createCommunityInvite,
     setRetry,
   } = useContext(CommunityContext)
 
   useEffect(() => {
+    console.log('retry', retry)
     if (retry) {
       console.log('hello world')
       createCommunityInvite({ communityId: communitySelected._id })
@@ -22,10 +26,16 @@ const CommunityInvite = () => {
   }, [retry])
 
   const handlePress = () => {
-    createCommunityInvite({ communityId: communitySelected._id })
+    if (communityInvite) {
+      setShowInvitation(true)
+      return
+    } else {
+      createCommunityInvite({ communityId: communitySelected._id })
+    }
   }
 
   const renderContent = () => {
+    if (showInvitation) return <CommunityInvitation />
     return (
       <TouchableOpacity style={styles.container} onPress={handlePress}>
         <Text style={styles.text}>Invite</Text>

@@ -19,6 +19,7 @@ const InitFetchCollections = () => {
   const {
     state: { communitySelected },
     fetchSelectedCommunityAdmin,
+    fetchCommunityInvite,
   } = useContext(CommunityContext)
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const InitFetchCollections = () => {
   useEffect(() => {
     if (communitySelected) {
       fetchSelectedCommunityAdmin({ adminId: communitySelected.adminId })
+      fetchCommunityInvite({ communityId: communitySelected._id })
     }
   }, [communitySelected])
 

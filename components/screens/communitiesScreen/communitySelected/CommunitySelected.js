@@ -1,18 +1,33 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
 
 import CommunitySelectedAdminBar from '../communityAdmin/CommunitySelectedAdimBar'
+import CommunityInvitation from '../communityAdmin/CommunityInvitation'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunitySelected = () => {
   const {
-    state: { communitySelected, communitySelectedAdmin },
+    state: {
+      communitySelected,
+      communitySelectedAdmin,
+      showInvite,
+      inviteCreatedSuccessfully,
+    },
+    setShowInvite,
   } = useContext(CommunityContext)
 
+  useEffect(() => {
+    if (inviteCreatedSuccessfully) {
+      setShowInvite(true)
+      return () => setShowInvite
+    }
+  }, [inviteCreatedSuccessfully])
+
   const renderContent = () => {
+    if (showInvite) return <CommunityInvitation />
     return (
       <View style={styles.container}>
         <CommunitySelectedAdminBar />

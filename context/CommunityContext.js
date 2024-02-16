@@ -33,6 +33,10 @@ const CommunityReducer = (state, action) => {
       }
     case 'SET_COMMUNITY_INVITE':
       return { ...state, communityInvite: action.payload, loading: false }
+    case 'SET_SHOW_INVITE':
+      return { ...state, showInvite: action.payload }
+    case 'SET_INVITE_CREATED_SUCCEFULLY':
+      return { ...state, inviteCreatedSuccessfully: action.payload }
     default:
       return state
   }
@@ -118,11 +122,32 @@ const createCommunityInvite = (dispatch) => async (data) => {
       '/community/create-community-invite',
       data
     )
-    console.log('response', response.data)
     if (response.data.retry) {
       dispatch({ type: 'SET_RETRY', payload: response.data.retry })
       return
     }
+    dispatch({ type: 'SET_COMMUNITY_INVITE', payload: response.data })
+    dispatch({ type: 'SET_INVITE_CREATED_SUCCEFULLY', payload: true })
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
+const setShowInvite = (dispatch) => (data) => {
+  dispatch({ type: 'SET_SHOW_INVITE', payload: data })
+}
+
+const fetchCommunityInvite = (dispatch) => async (data) => {
+  dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post(
+      '/community/fetch-community-invite',
+      data
+    )
     dispatch({ type: 'SET_COMMUNITY_INVITE', payload: response.data })
     return
   } catch (error) {
@@ -131,6 +156,10 @@ const createCommunityInvite = (dispatch) => async (data) => {
       payload: error,
     })
   }
+}
+
+const setInviteCreatedSuccessfully = (dispatch) => (data) => {
+  dispatch({ type: 'SET_INVITE_CREATED_SUCCEFULLY', payload: data })
 }
 
 export const { Provider, Context } = createDataContext(
@@ -145,6 +174,9 @@ export const { Provider, Context } = createDataContext(
     setCommunitySelected,
     fetchSelectedCommunityAdmin,
     createCommunityInvite,
+    setShowInvite,
+    fetchCommunityInvite,
+    setInviteCreatedSuccessfully,
   },
   {
     loading: false,
@@ -155,5 +187,7 @@ export const { Provider, Context } = createDataContext(
     communitySelected: null,
     communitySelectedAdmin: null,
     communityInvite: null,
+    showInvite: false,
+    inviteCreatedSuccessfully: false,
   }
 )

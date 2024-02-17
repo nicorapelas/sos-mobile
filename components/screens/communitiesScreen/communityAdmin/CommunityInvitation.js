@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import moment from 'moment'
-
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { normalize } from '../../../../utils/fontUtils'
 
@@ -22,41 +21,54 @@ const CommunityInvitation = () => {
     console.log(`share`)
   }
 
-  const renderContent = () => {
-    return (
-      <View style={styles.containerY}>
-        <View style={styles.containerX}>
-          <View style={styles.closeContainer}>
-            <TouchableOpacity onPress={handlePressClose}>
-              <MaterialCommunityIcons name="close" style={styles.closeIcon} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.label}>Joining pin</Text>
-            <Text style={styles.text}>{communityInvite.pin}</Text>
-            <Text style={styles.label}>Date created</Text>
-            <Text style={styles.text}>
-              {moment(communityInvite.date).format('YYYY-MM-DD')}
-            </Text>
-          </View>
-          <View style={styles.shareContainer}>
-            <TouchableOpacity
-              onPress={handlePressShare}
-              style={styles.shareButton}
-            >
-              <Text style={styles.shareText}>Share</Text>
-              <MaterialCommunityIcons
-                name="share-variant"
-                style={styles.shareIcon}
-              />
-            </TouchableOpacity>
-          </View>
+  const formattedPin = communityInvite.pin
+    .toString()
+    .match(/.{1,2}/g)
+    .join(' ')
+
+  useEffect(() => {
+    if (communityInvite) {
+      console.log(communityInvite.date)
+    }
+  }, [communityInvite])
+
+  return (
+    <View style={styles.containerY}>
+      <View style={styles.containerX}>
+        <View style={styles.closeContainer}>
+          <TouchableOpacity onPress={handlePressClose}>
+            <MaterialCommunityIcons name="close" style={styles.closeIcon} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.textIntructionContainer}>
+          <Text style={styles.text}>NOTE: Pin valid for 24 hours.</Text>
+        </View>
+        <View style={styles.textPinContainer}>
+          <Text style={styles.label}>Joining pin</Text>
+          <Text style={styles.text}>{formattedPin}</Text>
+          <Text style={styles.label}>Date & Time created</Text>
+          <Text style={styles.text}>
+            {moment(communityInvite.date).format('YYYY-MM-DD')}
+          </Text>
+          <Text style={styles.text}>
+            {moment(communityInvite.date).format('HH:mm:ss')}
+          </Text>
+        </View>
+        <View style={styles.shareContainer}>
+          <TouchableOpacity
+            onPress={handlePressShare}
+            style={styles.shareButton}
+          >
+            <Text style={styles.shareText}>Share</Text>
+            <MaterialCommunityIcons
+              name="share-variant"
+              style={styles.shareIcon}
+            />
+          </TouchableOpacity>
         </View>
       </View>
-    )
-  }
-
-  return renderContent()
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -85,22 +97,26 @@ const styles = StyleSheet.create({
   label: {
     color: '#c4c4c2',
     fontWeight: '700',
-    fontSize: normalize(15),
+    fontSize: normalize(16),
     marginBottom: 7,
     textAlign: 'center',
   },
-  textContainer: {
-    flex: 2,
+  textIntructionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  textPinContainer: {
+    flex: 3,
     justifyContent: 'center',
   },
   text: {
-    fontSize: normalize(14),
+    fontSize: normalize(15),
     textAlign: 'center',
     marginHorizontal: 15,
     marginBottom: 10,
   },
   shareContainer: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'center',
   },

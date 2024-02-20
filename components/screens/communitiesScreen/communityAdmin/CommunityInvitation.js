@@ -26,12 +26,6 @@ const CommunityInvitation = () => {
     .match(/.{1,2}/g)
     .join(' ')
 
-  useEffect(() => {
-    if (communityInvite) {
-      console.log(communityInvite.date)
-    }
-  }, [communityInvite])
-
   return (
     <View style={styles.containerY}>
       <View style={styles.containerX}>

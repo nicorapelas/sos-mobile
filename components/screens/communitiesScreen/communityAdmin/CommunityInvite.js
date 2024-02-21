@@ -19,7 +19,7 @@ const CommunityInvite = () => {
       setRetry(false)
       return () => createCommunityInvite
     }
-  }, [retry])
+  }, [retry, communitySelected])
 
   const handlePress = () => {
     if (communityInvite) {

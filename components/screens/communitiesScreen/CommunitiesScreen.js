@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import { Context as CommunityContext } from '../../../context/CommunityContext'
 import Menu from '../../commom/menu/Menu'
 import CreateCommunity from './createCommunity/CreateCommunity'
 import CommunityList from './communityList/CommunityList'
 import CommunitySelected from './communitySelected/CommunitySelected'
+import JoinCommunity from './joinCommunity/JoinCommunity'
 
 const CommunitiesScreen = () => {
   const {
@@ -22,6 +23,7 @@ const CommunitiesScreen = () => {
           <Menu />
         </View>
         <CreateCommunity />
+        <JoinCommunity />
         <CommunityList />
       </View>
     )

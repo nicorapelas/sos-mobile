@@ -37,6 +37,8 @@ const CommunityReducer = (state, action) => {
       return { ...state, showInvite: action.payload }
     case 'SET_INVITE_CREATED_SUCCEFULLY':
       return { ...state, inviteCreatedSuccessfully: action.payload }
+    case 'SET_INVITE_TIME_REMAINING':
+      return { ...state, inviteTimeRemaining: action.payload }
     default:
       return state
   }
@@ -162,6 +164,28 @@ const setInviteCreatedSuccessfully = (dispatch) => (data) => {
   dispatch({ type: 'SET_INVITE_CREATED_SUCCEFULLY', payload: data })
 }
 
+const setInviteTimeRemaining = (dispatch) => (data) => {
+  dispatch({ type: 'SET_INVITE_TIME_REMAINING', payload: data })
+}
+
+const joinCommunity = (dispatch) => async (data) => {
+  console.log(data)
+  // dispatch({ type: 'LOADING' })
+  // try {
+  //   const response = await ngrokApi.post(
+  //     '/community/fetch-community-invite',
+  //     data
+  //   )
+  //   dispatch({ type: 'SET_COMMUNITY_INVITE', payload: response.data })
+  //   return
+  // } catch (error) {
+  //   dispatch({
+  //     type: 'SET_ERROR',
+  //     payload: error,
+  //   })
+  // }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -177,6 +201,7 @@ export const { Provider, Context } = createDataContext(
     setShowInvite,
     fetchCommunityInvite,
     setInviteCreatedSuccessfully,
+    setInviteTimeRemaining,
   },
   {
     loading: false,
@@ -189,5 +214,6 @@ export const { Provider, Context } = createDataContext(
     communityInvite: null,
     showInvite: false,
     inviteCreatedSuccessfully: false,
+    inviteTimeRemaining: '',
   }
 )

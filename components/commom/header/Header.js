@@ -26,6 +26,9 @@ const Header = () => {
         setFormLabel('CREATE COMMUNITY')
         setReturnTab('communities')
         break
+      case 'joinCommunityForm':
+        setFormLabel('JOIN COMMUNITY')
+        setReturnTab('communities')
       default:
         break
     }

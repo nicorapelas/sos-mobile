@@ -169,21 +169,18 @@ const setInviteTimeRemaining = (dispatch) => (data) => {
 }
 
 const joinCommunity = (dispatch) => async (data) => {
-  console.log(data)
   // dispatch({ type: 'LOADING' })
-  // try {
-  //   const response = await ngrokApi.post(
-  //     '/community/fetch-community-invite',
-  //     data
-  //   )
-  //   dispatch({ type: 'SET_COMMUNITY_INVITE', payload: response.data })
-  //   return
-  // } catch (error) {
-  //   dispatch({
-  //     type: 'SET_ERROR',
-  //     payload: error,
-  //   })
-  // }
+  try {
+    const response = await ngrokApi.post('/community/join-community', data)
+    console.log(`response`, response.data)
+    // dispatch({ type: 'JOIN_COMMUNITY', payload: response.data })
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
 }
 
 export const { Provider, Context } = createDataContext(
@@ -202,6 +199,7 @@ export const { Provider, Context } = createDataContext(
     fetchCommunityInvite,
     setInviteCreatedSuccessfully,
     setInviteTimeRemaining,
+    joinCommunity,
   },
   {
     loading: false,

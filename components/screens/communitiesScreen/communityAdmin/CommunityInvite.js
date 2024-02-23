@@ -15,7 +15,10 @@ const CommunityInvite = () => {
 
   useEffect(() => {
     if (retry) {
-      createCommunityInvite({ communityId: communitySelected._id })
+      createCommunityInvite({
+        communityId: communitySelected._id,
+        name: communitySelected.name,
+      })
       setRetry(false)
       return () => createCommunityInvite
     }
@@ -25,7 +28,11 @@ const CommunityInvite = () => {
     if (communityInvite) {
       setShowInvite(true)
     } else {
-      createCommunityInvite({ communityId: communitySelected._id })
+      createCommunityInvite({
+        communityId: communitySelected._id,
+        name: communitySelected.name,
+        adminId: communitySelected.adminId,
+      })
     }
   }
 

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Entypo } from '@expo/vector-icons'
 
 import { Context as NavContext } from '../../../../context/NavContext'
 import { Context as FormContext } from '../../../../context/FormContext'
@@ -29,7 +30,8 @@ const CreateCommunityButton = () => {
     return (
       <View style={containerStyle}>
         <TouchableOpacity style={styles.button} onPress={handleClick}>
-          <Text style={styles.text}>+ Create new community</Text>
+          <Entypo name="plus" style={styles.icon} />
+          <Text style={styles.text}>Create new community</Text>
         </TouchableOpacity>
       </View>
     )
@@ -45,17 +47,25 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   button: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     width: '90%',
     borderColor: 'black',
     borderWidth: 1,
     borderRadius: 30,
+  },
+  icon: {
+    color: 'black',
+    fontSize: normalize(16),
+    alignSelf: 'center',
+    marginRight: 5,
   },
   text: {
     color: 'black',
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: '600',
-    padding: 15,
+    paddingVertical: 15,
   },
 })
 

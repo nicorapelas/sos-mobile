@@ -40,6 +40,12 @@ const DataDrvRedirecting = () => {
       setNavTabSelected('communities')
       setSuccessCommunity('')
     }
+    if (communitySuccess === 'joinedSuccessfully') {
+      console.log(`hello world`)
+      setFormSelected('')
+      setNavTabSelected('communities')
+      setSuccessCommunity('')
+    }
   }, [communitySuccess])
 
   return null

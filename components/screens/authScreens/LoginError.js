@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { View, Text, Button, StyleSheet } from 'react-native'
 
-import { Context as AuthContext } from '../../../../context/AuthContext'
+import { Context as AuthContext } from '../../../context/AuthContext'
 
 const LoginError = () => {
   const {

@@ -1,14 +1,22 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  Button,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import CountryPicker from 'react-native-country-picker-modal'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { Context as AuthContext } from '../../../../context/AuthContext'
-import LoginError from './LoginError'
-import LoginStatus from './LoginStatus'
+import { normalize } from '../../../../utils/fontUtils'
+import LoginError from '../LoginError'
+import LoginStatus from '../LoginStatus'
 
-const Login = () => {
+const LoginEmail = () => {
   const [countryCode, setCountryCode] = useState('')
   const [countryPickerVisible, setCountryPickerVisible] = useState(false)
 
@@ -21,39 +29,18 @@ const Login = () => {
     state: { error, status, redirectToLogin },
     requestOtp,
     setRedirectToLogin,
+    setLoginOption,
   } = useContext(AuthContext)
-
-  useEffect(() => {
-    if (redirectToLogin) {
-      setUserPhoneNumber(null)
-      setRedirectToLogin(false)
-    }
-  }, [redirectToLogin])
-
-  useEffect(() => {
-    if (userCountryIpData) {
-      setCountryCode(userCountryIpData)
-    }
-  }, [userCountryIpData])
-
-  const handleOtpRequest = () => {
-    const phoneNumberObj = parsePhoneNumberFromString(
-      userPhoneNumber,
-      countryCode
-    )
-    if (phoneNumberObj?.isValid()) {
-      let phoneNum = phoneNumberObj.formatInternational()
-      setUserPhoneNumber(phoneNum)
-      requestOtp({ phoneNumber: phoneNum })
-    } else {
-      alert('Invalid phone number')
-    }
-  }
 
   const renderForm = () => {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
+        <View style={styles.backButtonContainer}>
+          <TouchableOpacity onPress={() => setLoginOption('')}>
+            <Text style={styles.backButtonText}>back</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.title}>Phone login</Text>
         <Button
           title="Select Country"
           onPress={() => setCountryPickerVisible(true)}
@@ -99,6 +86,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  backButtonContainer: {
+    width: '100%',
+    marginBottom: 30,
+  },
+  backButtonText: {
+    fontSize: normalize(16),
+  },
   input: {
     borderWidth: 1,
     borderColor: 'gray',
@@ -109,9 +103,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: normalize(20),
     marginBottom: 20,
   },
 })
 
-export default Login
+export default LoginEmail

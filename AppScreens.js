@@ -7,7 +7,7 @@ import InitFetchCollections from './components/data/InitFetchCollections'
 import DataDrvRedirecting from './components/data/DataDrvRedirecting'
 import AppLoadingCheck from './components/commom/loader/AppLoadingCheck'
 import Loader from './components/commom/loader/Loader'
-import Login from './components/screens/authScreens/login/Login'
+import Welcome from './components/screens/authScreens/Welcome'
 import MainScreen from './components/screens/main/MainScreen'
 
 export default function AppScreens() {
@@ -33,7 +33,7 @@ export default function AppScreens() {
   const invalidTokenScreenSelector = () => {
     return (
       <>
-        <Login />
+        <Welcome />
         <StatusBar style="auto" />
       </>
     )
@@ -51,7 +51,7 @@ export default function AppScreens() {
   const renderContent = () => {
     if (appLoading) return <Loader />
     if (triggerRedirectToLogin) {
-      return <Login />
+      return <Welcome />
     }
     switch (tokenValid) {
       case false:

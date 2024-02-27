@@ -13,9 +13,11 @@ const CommunityList = () => {
   } = useContext(UserDataContext)
 
   const {
-    state: { communityList },
+    state: { communityList, updateList, initListCount },
     setCommunityList,
     fetchSelectedCommunity,
+    setUpdateList,
+    setInitListCount,
   } = useContext(CommunityContext)
 
   const {
@@ -23,16 +25,27 @@ const CommunityList = () => {
   } = useContext(MenuContext)
 
   useEffect(() => {
-    if (user && user.community && user.community.length > 0) {
-      const isCommunityAlreadyIncluded = user.community.every((uc) =>
-        communityList.includes(uc)
-      )
-      if (!isCommunityAlreadyIncluded) {
-        const updatedCommunityList = [...communityList, ...user.community]
-        setCommunityList(updatedCommunityList)
+    if (initListCount < 1) {
+      if (user && user.community && user.community.length > 0) {
+        const isCommunityAlreadyIncluded = user.community.every((uc) =>
+          communityList.includes(uc)
+        )
+        if (!isCommunityAlreadyIncluded) {
+          const updatedCommunityList = [...communityList, ...user.community]
+          setCommunityList(updatedCommunityList)
+        }
+        setInitListCount(1)
       }
     }
-  }, [user])
+  }, [user, initListCount])
+
+  useEffect(() => {
+    if (updateList.length > 0) {
+      setCommunityList([])
+      setCommunityList(updateList)
+      setUpdateList([])
+    }
+  }, [updateList])
 
   const handlePress = (id) => {
     fetchSelectedCommunity(id)

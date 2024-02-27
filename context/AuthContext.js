@@ -26,6 +26,8 @@ const AuthReducer = (state, action) => {
       return { ...state, tokenValid: action.payload, loading: false }
     case 'SET_TOKEN_VALID':
       return { ...state, tokenValid: action.payload }
+    case 'SET_LOGIN_OPTION':
+      return { ...state, loginOption: action.payload }
     default:
       return state
   }
@@ -122,6 +124,11 @@ const setRedirectToLogin = (dispatch) => (data) => {
   return
 }
 
+const setLoginOption = (dispatch) => (data) => {
+  dispatch({ type: 'SET_LOGIN_OPTION', payload: data })
+  return
+}
+
 export const { Provider, Context } = createDataContext(
   AuthReducer,
   {
@@ -133,6 +140,7 @@ export const { Provider, Context } = createDataContext(
     tokenValidation,
     signout,
     setRedirectToLogin,
+    setLoginOption,
   },
   {
     loading: false,
@@ -142,5 +150,6 @@ export const { Provider, Context } = createDataContext(
     token: null,
     tokenValid: false,
     redirectToLogin: false,
+    loginOption: '',
   }
 )

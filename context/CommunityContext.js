@@ -16,11 +16,6 @@ const CommunityReducer = (state, action) => {
       return { ...state, retry: action.payload }
     case 'SET_COMMUNITY_LIST':
       return { ...state, communityList: action.payload }
-    case 'ADD_COMMUNITY':
-      return {
-        ...state,
-        communityList: [...state.communityList, action.payload],
-      }
     case 'FETCH_COMMUNITY_SELECTED':
       return { ...state, communitySelected: action.payload, loading: false }
     case 'SET_COMMUNITY_SELECTED':
@@ -39,6 +34,10 @@ const CommunityReducer = (state, action) => {
       return { ...state, inviteCreatedSuccessfully: action.payload }
     case 'SET_INVITE_TIME_REMAINING':
       return { ...state, inviteTimeRemaining: action.payload }
+    case 'SET_UPDATE_LIST':
+      return { ...state, updateList: action.payload }
+    case 'SET_INIT_LIST_COUNT':
+      return { ...state, initListCount: action.payload }
     default:
       return state
   }
@@ -53,8 +52,11 @@ const createCommunity = (dispatch) => async (data) => {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return
     }
-    dispatch({ type: 'ADD_COMMUNITY', payload: response.data })
-    dispatch({ type: 'SET_SUCCESS', payload: 'communityCreatedSuccefully' })
+    dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+    dispatch({
+      type: 'SET_UPDATE_LIST',
+      payload: response.data.communityList,
+    })
     return
   } catch (error) {
     dispatch({
@@ -169,11 +171,15 @@ const setInviteTimeRemaining = (dispatch) => (data) => {
 }
 
 const joinCommunity = (dispatch) => async (data) => {
-  // dispatch({ type: 'LOADING' })
+  dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/join-community', data)
     console.log(`response`, response.data)
-    // dispatch({ type: 'JOIN_COMMUNITY', payload: response.data })
+    dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+    dispatch({
+      type: 'SET_UPDATE_LIST',
+      payload: response.data.communityList,
+    })
     return
   } catch (error) {
     dispatch({
@@ -181,6 +187,14 @@ const joinCommunity = (dispatch) => async (data) => {
       payload: error,
     })
   }
+}
+
+const setUpdateList = (dispatch) => (data) => {
+  dispatch({ type: 'SET_UPDATE_LIST', payload: data })
+}
+
+const setInitListCount = (dispatch) => (data) => {
+  dispatch({ type: 'SET_INIT_LIST_COUNT', payload: data })
 }
 
 export const { Provider, Context } = createDataContext(
@@ -200,6 +214,8 @@ export const { Provider, Context } = createDataContext(
     setInviteCreatedSuccessfully,
     setInviteTimeRemaining,
     joinCommunity,
+    setUpdateList,
+    setInitListCount,
   },
   {
     loading: false,
@@ -213,5 +229,7 @@ export const { Provider, Context } = createDataContext(
     showInvite: false,
     inviteCreatedSuccessfully: false,
     inviteTimeRemaining: '',
+    updateList: [],
+    initListCount: 0,
   }
 )

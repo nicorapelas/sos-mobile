@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 
-import { Context as AuthContext } from '../../../../context/AuthContext'
-import { Context as UserDataContext } from '../../../../context/UserDataContext'
+import { Context as AuthContext } from '../../../context/AuthContext'
+import { Context as UserDataContext } from '../../../context/UserDataContext'
 
 const LoginStatus = () => {
   const {

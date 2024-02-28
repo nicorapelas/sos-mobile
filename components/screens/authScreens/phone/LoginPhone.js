@@ -6,6 +6,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native'
 import CountryPicker from 'react-native-country-picker-modal'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
@@ -61,7 +62,11 @@ const LoginPhone = () => {
 
   const renderForm = () => {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
         <View style={styles.backButtonContainer}>
           <TouchableOpacity onPress={() => setLoginOption('')}>
             <Text style={styles.backButtonText}>back</Text>
@@ -94,7 +99,7 @@ const LoginPhone = () => {
           placeholder="Enter Phone Number"
         />
         <Button title="Request OTP" onPress={handleOtpRequest} />
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 

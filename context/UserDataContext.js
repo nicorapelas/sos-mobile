@@ -24,6 +24,8 @@ const UserDataReducer = (state, action) => {
       return { ...state, userCountryIpData: action.payload }
     case 'SET_USER_PHONE_NUMBER':
       return { ...state, userPhoneNumber: action.payload }
+    case 'SET_USER_EMAIL_ADDRESS':
+      return { ...state, userEmailAddress: action.payload }
     case 'SET_FETCH_USER_COUNT':
       return { ...state, fetchUserCount: action.payload, loading: false }
     case 'EDIT_USER':
@@ -61,6 +63,10 @@ setUserCountryIpData = (dispatch) => (data) => {
 
 setUserPhoneNumber = (dispatch) => (data) => {
   dispatch({ type: 'SET_USER_PHONE_NUMBER', payload: data })
+}
+
+setUserEmailAddress = (dispatch) => (data) => {
+  dispatch({ type: 'SET_USER_EMAIL_ADDRESS', payload: data })
 }
 
 const fetchUser = (dispatch) => async () => {
@@ -101,6 +107,7 @@ export const { Provider, Context } = createDataContext(
     clearSuccess,
     setUserCountryIpData,
     setUserPhoneNumber,
+    setUserEmailAddress,
     fetchUser,
     setFetchUserCount,
     editUser,
@@ -112,6 +119,7 @@ export const { Provider, Context } = createDataContext(
     success: null,
     userCountryIpData: null,
     userPhoneNumber: null,
+    userEmailAddress: null,
     user: null,
     fetchUserCount: 0,
   }

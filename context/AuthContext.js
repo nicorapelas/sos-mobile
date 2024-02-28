@@ -34,12 +34,12 @@ const AuthReducer = (state, action) => {
 }
 
 // Actions
-const clearError = (dispatch) => async () => {
+const clearError = (dispatch) => () => {
   dispatch({ type: 'CLEAR_ERROR', payload: null })
   return
 }
 
-const clearStatus = (dispatch) => async () => {
+const clearStatus = (dispatch) => () => {
   dispatch({ type: 'CLEAR_STATUS', payload: null })
   return
 }
@@ -99,6 +99,7 @@ const verifyOtp = (dispatch) => async (data) => {
     return
   }
 }
+
 const tokenValidation = (dispatch) => async () => {
   const token = await AsyncStorage.getItem('token')
   if (!token || token === null) {
@@ -108,6 +109,20 @@ const tokenValidation = (dispatch) => async () => {
   if (token) {
     dispatch({ type: 'SIGN_IN', payload: token })
     dispatch({ type: 'SET_TOKEN_VALID', payload: true })
+    return
+  }
+}
+
+const emailSignin = (dispatch) => async (data) => {
+  // dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post('/auth/email-signin', data)
+    console.log(`response.data`, response.data)
+  } catch (error) {
+    dispatch({
+      type: 'ADD_ERROR',
+      payload: error,
+    })
     return
   }
 }
@@ -138,6 +153,7 @@ export const { Provider, Context } = createDataContext(
     setOtpCode,
     verifyOtp,
     tokenValidation,
+    emailSignin,
     signout,
     setRedirectToLogin,
     setLoginOption,

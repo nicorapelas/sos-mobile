@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {
   View,
   Text,
@@ -6,9 +6,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native'
-import CountryPicker from 'react-native-country-picker-modal'
-import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { Context as AuthContext } from '../../../../context/AuthContext'
@@ -17,57 +16,52 @@ import LoginError from '../LoginError'
 import LoginStatus from '../LoginStatus'
 
 const LoginEmail = () => {
-  const [countryCode, setCountryCode] = useState('')
-  const [countryPickerVisible, setCountryPickerVisible] = useState(false)
-
   const {
-    state: { userCountryIpData, userPhoneNumber },
-    setUserPhoneNumber,
+    state: { userEmailAddress },
+    setUserEmailAddress,
   } = useContext(UserDataContext)
 
   const {
     state: { error, status, redirectToLogin },
-    requestOtp,
+    emailSignin,
     setRedirectToLogin,
     setLoginOption,
   } = useContext(AuthContext)
 
+  useEffect(() => {
+    if (redirectToLogin) {
+      setUserEmailAddress(null)
+      setRedirectToLogin(false)
+    }
+  }, [redirectToLogin])
+
+  const handleSubmit = () => {
+    emailSignin({ email: userEmailAddress })
+  }
+
   const renderForm = () => {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
         <View style={styles.backButtonContainer}>
           <TouchableOpacity onPress={() => setLoginOption('')}>
             <Text style={styles.backButtonText}>back</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Phone login</Text>
-        <Button
-          title="Select Country"
-          onPress={() => setCountryPickerVisible(true)}
-        />
-        <CountryPicker
-          withFilter
-          withFlag
-          withCountryNameButton
-          withCallingCode
-          withAlphaFilter
-          withCallingCodeButton
-          countryCode={countryCode}
-          onSelect={(country) => {
-            setCountryCode(country.cca2)
-            setUserPhoneNumber(`+${country.callingCode[0]}`)
-          }}
-          visible={countryPickerVisible}
-        />
+        <Text style={styles.title}>Email login</Text>
         <TextInput
           style={styles.input}
-          value={userPhoneNumber}
-          onChangeText={setUserPhoneNumber}
-          keyboardType="phone-pad"
-          placeholder="Enter Phone Number"
+          value={userEmailAddress}
+          onChangeText={setUserEmailAddress}
+          keyboardType="email-address"
+          placeholder="Enter email address"
+          autoCapitalize="none"
         />
-        <Button title="Request OTP" onPress={handleOtpRequest} />
-      </View>
+        <Button title="Submit" onPress={handleSubmit} />
+      </KeyboardAvoidingView>
     )
   }
 

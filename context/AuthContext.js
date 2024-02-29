@@ -44,10 +44,10 @@ const clearStatus = (dispatch) => () => {
   return
 }
 
-const requestOtp = (dispatch) => async (data) => {
+const requestOtpSms = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
-    const response = await ngrokApi.post('/auth/request-otp', data)
+    const response = await ngrokApi.post('/auth/request-otp-sms', data)
     if (response.data) {
       if (response.data.status === 'pending') {
         dispatch({ type: 'ADD_STATUS', payload: response.data.status })
@@ -76,10 +76,10 @@ const setOtpCode = (dispatch) => (data) => {
   return
 }
 
-const verifyOtp = (dispatch) => async (data) => {
+const verifyOtpSms = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
-    const response = await ngrokApi.post('/auth/verify-otp', data)
+    const response = await ngrokApi.post('/auth/verify-otp-sms', data)
     if (response.data.error) {
       dispatch({
         type: 'ADD_ERROR',
@@ -113,10 +113,10 @@ const tokenValidation = (dispatch) => async () => {
   }
 }
 
-const emailSignin = (dispatch) => async (data) => {
+const requestOtpEmail = (dispatch) => async (data) => {
   // dispatch({ type: 'LOADING' })
   try {
-    const response = await ngrokApi.post('/auth/email-signin', data)
+    const response = await ngrokApi.post('/auth/request-otp-email', data)
     console.log(`response.data`, response.data)
   } catch (error) {
     dispatch({
@@ -149,11 +149,11 @@ export const { Provider, Context } = createDataContext(
   {
     clearError,
     clearStatus,
-    requestOtp,
+    requestOtpSms,
     setOtpCode,
-    verifyOtp,
+    verifyOtpSms,
     tokenValidation,
-    emailSignin,
+    requestOtpEmail,
     signout,
     setRedirectToLogin,
     setLoginOption,

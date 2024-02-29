@@ -23,7 +23,7 @@ const LoginEmail = () => {
 
   const {
     state: { error, status, redirectToLogin },
-    emailSignin,
+    requestOtpEmail,
     setRedirectToLogin,
     setLoginOption,
   } = useContext(AuthContext)
@@ -36,7 +36,7 @@ const LoginEmail = () => {
   }, [redirectToLogin])
 
   const handleSubmit = () => {
-    emailSignin({ email: userEmailAddress })
+    requestOtpEmail({ email: userEmailAddress })
   }
 
   const renderForm = () => {

@@ -8,7 +8,7 @@ const LoginStatus = () => {
   const {
     state: { otpCode },
     setOtpCode,
-    verifyOtp,
+    verifyOtpSms,
     clearStatus,
   } = useContext(AuthContext)
 
@@ -21,7 +21,7 @@ const LoginStatus = () => {
       alert('Invalid verification code')
       return
     }
-    verifyOtp({ phoneNumber: userPhoneNumber, otpCode: otpCode })
+    verifyOtpSms({ phoneNumber: userPhoneNumber, otpCode: otpCode })
     clearStatus()
     setOtpCode('')
   }

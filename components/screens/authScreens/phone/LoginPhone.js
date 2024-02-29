@@ -28,7 +28,7 @@ const LoginPhone = () => {
 
   const {
     state: { error, status, redirectToLogin },
-    requestOtp,
+    requestOtpSms,
     setRedirectToLogin,
     setLoginOption,
   } = useContext(AuthContext)
@@ -54,7 +54,7 @@ const LoginPhone = () => {
     if (phoneNumberObj?.isValid()) {
       let phoneNum = phoneNumberObj.formatInternational()
       setUserPhoneNumber(phoneNum)
-      requestOtp({ phoneNumber: phoneNum })
+      requestOtpSms({ phoneNumber: phoneNum })
     } else {
       alert('Invalid phone number')
     }

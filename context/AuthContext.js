@@ -117,7 +117,12 @@ const requestOtpEmail = (dispatch) => async (data) => {
   // dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/auth/request-otp-email', data)
-    console.log(`response.data`, response.data)
+    if (response.data.error) {
+      dispatch({ type: 'ADD_ERROR', payload: response.data.error })
+    }
+    if (response.data.status) {
+      dispatch({ type: 'ADD_STATUS', payload: response.data.status })
+    }
   } catch (error) {
     dispatch({
       type: 'ADD_ERROR',

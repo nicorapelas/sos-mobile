@@ -6,7 +6,7 @@ import { Context as UserDataContext } from '../../../context/UserDataContext'
 
 const LoginStatus = () => {
   const {
-    state: { otpCode },
+    state: { otpCode, status },
     setOtpCode,
     verifyOtpSms,
     clearStatus,
@@ -21,9 +21,20 @@ const LoginStatus = () => {
       alert('Invalid verification code')
       return
     }
-    verifyOtpSms({ phoneNumber: userPhoneNumber, otpCode: otpCode })
-    clearStatus()
-    setOtpCode('')
+    switch (status) {
+      case 'pending':
+        verifyOtpSms({ phoneNumber: userPhoneNumber, otpCode: otpCode })
+        clearStatus()
+        setOtpCode('')
+        break
+      case 'emailOtpSent':
+        console.log(`hello world...!`)
+        clearStatus()
+        setOtpCode('')
+        break
+      default:
+        break
+    }
   }
 
   const renderStatus = () => {

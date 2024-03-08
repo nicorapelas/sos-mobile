@@ -83,7 +83,7 @@ const verifyOtpSms = (dispatch) => async (data) => {
     if (response.data.error) {
       dispatch({
         type: 'ADD_ERROR',
-        payload: `Invalid OTP, please request a new "One Time Pin" and try again. `,
+        payload: `Invalid OTP, please request a new "One Time Pin" and try again.`,
       })
       return
     }
@@ -114,7 +114,7 @@ const tokenValidation = (dispatch) => async () => {
 }
 
 const requestOtpEmail = (dispatch) => async (data) => {
-  // dispatch({ type: 'LOADING' })
+  dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/auth/request-otp-email', data)
     if (response.data.error) {
@@ -123,6 +123,31 @@ const requestOtpEmail = (dispatch) => async (data) => {
     if (response.data.status) {
       dispatch({ type: 'ADD_STATUS', payload: response.data.status })
     }
+  } catch (error) {
+    dispatch({
+      type: 'ADD_ERROR',
+      payload: error,
+    })
+    return
+  }
+}
+
+const verifyOtpEmail = (dispatch) => async (data) => {
+  dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post('/auth/verify-otp-email', data)
+    console.log(response.data)
+    if (response.data.error) {
+      dispatch({
+        type: 'ADD_ERROR',
+        payload: `Invalid OTP, please request a new "One Time Pin" and try again. `,
+      })
+      return
+    }
+    await AsyncStorage.setItem('token', response.data.token)
+    dispatch({ type: 'SIGN_IN', payload: response.data.token })
+    dispatch({ type: 'SET_TOKEN_VALID', payload: true })
+    return
   } catch (error) {
     dispatch({
       type: 'ADD_ERROR',
@@ -159,6 +184,7 @@ export const { Provider, Context } = createDataContext(
     verifyOtpSms,
     tokenValidation,
     requestOtpEmail,
+    verifyOtpEmail,
     signout,
     setRedirectToLogin,
     setLoginOption,

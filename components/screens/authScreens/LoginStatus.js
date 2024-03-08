@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 
 import { Context as AuthContext } from '../../../context/AuthContext'
@@ -9,11 +9,12 @@ const LoginStatus = () => {
     state: { otpCode, status },
     setOtpCode,
     verifyOtpSms,
+    verifyOtpEmail,
     clearStatus,
   } = useContext(AuthContext)
 
   const {
-    state: { userPhoneNumber },
+    state: { userPhoneNumber, userEmailAddress },
   } = useContext(UserDataContext)
 
   const handleOtpSubmit = () => {
@@ -28,7 +29,7 @@ const LoginStatus = () => {
         setOtpCode('')
         break
       case 'emailOtpSent':
-        console.log(`hello world...!`)
+        verifyOtpEmail({ email: userEmailAddress, otpCode: otpCode })
         clearStatus()
         setOtpCode('')
         break

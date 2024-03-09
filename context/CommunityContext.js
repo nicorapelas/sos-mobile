@@ -197,6 +197,23 @@ const setInitListCount = (dispatch) => (data) => {
   dispatch({ type: 'SET_INIT_LIST_COUNT', payload: data })
 }
 
+const fetchCommunityMembersList = (dispatch) => async (data) => {
+  // dispatch({ type: 'LOADING' })
+  try {
+    const response = await ngrokApi.post(
+      '/community/fetch-community-members-list',
+      data
+    )
+    console.log(`response`, response.data)
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -216,6 +233,7 @@ export const { Provider, Context } = createDataContext(
     joinCommunity,
     setUpdateList,
     setInitListCount,
+    fetchCommunityMembersList,
   },
   {
     loading: false,

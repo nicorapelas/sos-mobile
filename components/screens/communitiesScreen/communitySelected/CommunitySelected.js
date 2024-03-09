@@ -5,6 +5,7 @@ import moment from 'moment'
 
 import CommunitySelectedAdminBar from '../communityAdmin/CommunitySelectedAdimBar'
 import CommunityInvitation from '../communityAdmin/CommunityInvitation'
+import CommunityMembersList from '../communityMemberList/CommunityMembersList'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { normalize } from '../../../../utils/fontUtils'
 
@@ -54,6 +55,7 @@ const CommunitySelected = () => {
             </Text>
           </View>
         </View>
+        <CommunityMembersList />
       </View>
     )
   }

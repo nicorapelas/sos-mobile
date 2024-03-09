@@ -136,7 +136,6 @@ const verifyOtpEmail = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/auth/verify-otp-email', data)
-    console.log(response.data)
     if (response.data.error) {
       dispatch({
         type: 'ADD_ERROR',

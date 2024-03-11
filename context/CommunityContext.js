@@ -38,6 +38,8 @@ const CommunityReducer = (state, action) => {
       return { ...state, updateList: action.payload }
     case 'SET_INIT_LIST_COUNT':
       return { ...state, initListCount: action.payload }
+    case 'SET_COMMUNITY_MEMBERS_LIST':
+      return { ...state, communityMembersList: action.payload, loading: false }
     default:
       return state
   }
@@ -204,7 +206,7 @@ const fetchCommunityMembersList = (dispatch) => async (data) => {
       '/community/fetch-community-members-list',
       data
     )
-    console.log(`response`, response.data)
+    dispatch({ type: 'SET_COMMUNITY_MEMBERS_LIST', payload: response.data })
     return
   } catch (error) {
     dispatch({
@@ -249,5 +251,6 @@ export const { Provider, Context } = createDataContext(
     inviteTimeRemaining: '',
     updateList: [],
     initListCount: 0,
+    communityMembersList: [],
   }
 )

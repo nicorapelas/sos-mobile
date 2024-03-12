@@ -10,11 +10,13 @@ const HeaderBackButton = () => {
     state: { communitySelected },
     setCommunitySelected,
     setShowInvite,
+    setMembersListShow,
   } = useContext(CommunityContext)
 
   const handleBackButtonPress = () => {
     setCommunitySelected(null)
     setShowInvite(false)
+    setMembersListShow(false)
   }
 
   const renderBackButton = () => {

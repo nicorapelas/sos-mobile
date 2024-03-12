@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
 
@@ -10,14 +10,20 @@ import { Context as CommunityContext } from '../../../../context/CommunityContex
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunitySelected = () => {
+  const [initListCount, setInitListCount] = useState(0)
+
   const {
     state: {
       communitySelected,
       communitySelectedAdmin,
       showInvite,
       inviteCreatedSuccessfully,
+      communityMembersList,
+      membersListShow,
     },
     setShowInvite,
+    fetchCommunityMembersList,
+    setMembersListShow,
   } = useContext(CommunityContext)
 
   useEffect(() => {
@@ -27,8 +33,18 @@ const CommunitySelected = () => {
     }
   }, [inviteCreatedSuccessfully])
 
+  useEffect(() => {
+    if (initListCount < 1) {
+      if (communitySelected) {
+        fetchCommunityMembersList(communitySelected)
+        setInitListCount(1)
+      }
+    }
+  }, [initListCount, communitySelected])
+
   const renderContent = () => {
     if (showInvite) return <CommunityInvitation />
+    if (membersListShow) return <CommunityMembersList />
     return (
       <View style={styles.container}>
         <CommunitySelectedAdminBar />
@@ -55,7 +71,20 @@ const CommunitySelected = () => {
             </Text>
           </View>
         </View>
-        <CommunityMembersList />
+        <View>
+          <Text style={styles.label}>Number of members</Text>
+          {communityMembersList.length < 1 ? null : (
+            <View>
+              <Text style={styles.text}>{communityMembersList.length}</Text>
+              <TouchableOpacity
+                style={styles.viewMembersButton}
+                onPress={() => setMembersListShow(true)}
+              >
+                <Text style={styles.text}>View members</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
     )
   }
@@ -99,6 +128,17 @@ const styles = StyleSheet.create({
     fontSize: normalize(14),
     textAlign: 'center',
     marginHorizontal: 15,
+  },
+  label: {
+    color: '#c4c4c2',
+    fontWeight: '700',
+    fontSize: normalize(15),
+    marginBottom: 7,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  viewMembersButton: {
+    marginTop: 10,
   },
 })
 

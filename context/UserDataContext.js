@@ -30,6 +30,8 @@ const UserDataReducer = (state, action) => {
       return { ...state, fetchUserCount: action.payload, loading: false }
     case 'EDIT_USER':
       return { ...state, user: action.payload, loading: false }
+    case 'SET_IS_ADMIN':
+      return { ...state, isAdmin: action.payload }
     default:
       return state
   }
@@ -99,6 +101,10 @@ const editUser = (dispatch) => async (data) => {
   }
 }
 
+const setIsAdmin = (dispatch) => (data) => {
+  dispatch({ type: 'SET_IS_ADMIN', payload: data })
+}
+
 export const { Provider, Context } = createDataContext(
   UserDataReducer,
   {
@@ -111,6 +117,7 @@ export const { Provider, Context } = createDataContext(
     fetchUser,
     setFetchUserCount,
     editUser,
+    setIsAdmin,
   },
   {
     loading: false,
@@ -122,5 +129,6 @@ export const { Provider, Context } = createDataContext(
     userEmailAddress: null,
     user: null,
     fetchUserCount: 0,
+    isAdmin: false,
   }
 )

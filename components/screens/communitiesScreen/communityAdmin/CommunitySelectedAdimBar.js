@@ -6,14 +6,13 @@ import { Context as CommunityContext } from '../../../../context/CommunityContex
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 
 const CommunitySelectedAdminBar = () => {
-  const [isAdmin, setIsAdmin] = useState(false)
-
   const {
     state: { communitySelected },
   } = useContext(CommunityContext)
 
   const {
-    state: { user },
+    state: { user, isAdmin },
+    setIsAdmin,
   } = useContext(UserDataContext)
 
   useEffect(() => {

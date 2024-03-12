@@ -40,6 +40,8 @@ const CommunityReducer = (state, action) => {
       return { ...state, initListCount: action.payload }
     case 'SET_COMMUNITY_MEMBERS_LIST':
       return { ...state, communityMembersList: action.payload, loading: false }
+    case 'SET_MEMBERS_LIST_SHOW':
+      return { ...state, membersListShow: action.payload }
     default:
       return state
   }
@@ -216,6 +218,10 @@ const fetchCommunityMembersList = (dispatch) => async (data) => {
   }
 }
 
+const setMembersListShow = (dispatch) => (data) => {
+  dispatch({ type: 'SET_MEMBERS_LIST_SHOW', payload: data })
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -236,6 +242,7 @@ export const { Provider, Context } = createDataContext(
     setUpdateList,
     setInitListCount,
     fetchCommunityMembersList,
+    setMembersListShow,
   },
   {
     loading: false,
@@ -252,5 +259,6 @@ export const { Provider, Context } = createDataContext(
     updateList: [],
     initListCount: 0,
     communityMembersList: [],
+    membersListShow: false,
   }
 )

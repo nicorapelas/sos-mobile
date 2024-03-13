@@ -42,6 +42,8 @@ const CommunityReducer = (state, action) => {
       return { ...state, communityMembersList: action.payload, loading: false }
     case 'SET_MEMBERS_LIST_SHOW':
       return { ...state, membersListShow: action.payload }
+    case 'SET_MEMBER_DETAIL_SELECTED':
+      return { ...state, memberDetailSelected: action.payload }
     default:
       return state
   }
@@ -222,6 +224,10 @@ const setMembersListShow = (dispatch) => (data) => {
   dispatch({ type: 'SET_MEMBERS_LIST_SHOW', payload: data })
 }
 
+const setMemberDetailSelected = (dispatch) => (data) => {
+  dispatch({ type: 'SET_MEMBER_DETAIL_SELECTED', payload: data })
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -243,6 +249,7 @@ export const { Provider, Context } = createDataContext(
     setInitListCount,
     fetchCommunityMembersList,
     setMembersListShow,
+    setMemberDetailSelected,
   },
   {
     loading: false,
@@ -260,5 +267,6 @@ export const { Provider, Context } = createDataContext(
     initListCount: 0,
     communityMembersList: [],
     membersListShow: false,
+    memberDetailSelected: null,
   }
 )

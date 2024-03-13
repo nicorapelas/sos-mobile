@@ -7,16 +7,24 @@ import { normalize } from '../../../utils/fontUtils'
 
 const HeaderBackButton = () => {
   const {
-    state: { communitySelected },
+    state: { communitySelected, membersListShow, memberDetailSelected },
     setCommunitySelected,
     setShowInvite,
     setMembersListShow,
+    setMemberDetailSelected,
   } = useContext(CommunityContext)
 
   const handleBackButtonPress = () => {
+    if (memberDetailSelected) {
+      setMemberDetailSelected(null)
+      return
+    }
+    if (membersListShow) {
+      setMembersListShow(false)
+      return
+    }
     setCommunitySelected(null)
     setShowInvite(false)
-    setMembersListShow(false)
   }
 
   const renderBackButton = () => {

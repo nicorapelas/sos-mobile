@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
+import CommunityMemberDetail from '../communityMemberDetail/CommunityMemberDetail'
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { Context as MenuContext } from '../../../../context/MenuContext'
@@ -16,11 +17,12 @@ import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityMembersList = () => {
   const {
-    state: { user, isAdmin },
+    state: { isAdmin },
   } = useContext(UserDataContext)
 
   const {
-    state: { communityMembersList, communitySelected },
+    state: { communityMembersList, memberDetailSelected },
+    setMemberDetailSelected,
   } = useContext(CommunityContext)
 
   const {
@@ -32,11 +34,14 @@ const CommunityMembersList = () => {
     !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
   ]
 
-  const handlePressMember = () => {
+  const handlePressMember = (_id) => {
     if (!isAdmin) {
       return null
     }
-    console.log('hello world')
+    let member = communityMembersList.filter((member) => {
+      return member._id === _id
+    })
+    setMemberDetailSelected(member)
   }
 
   const renderList = () => {
@@ -50,7 +55,7 @@ const CommunityMembersList = () => {
             <ScrollView>
               <TouchableOpacity
                 style={styles.listRow}
-                onPress={handlePressMember}
+                onPress={() => handlePressMember(item._id)}
               >
                 <FontAwesome
                   name="user-circle"
@@ -66,6 +71,7 @@ const CommunityMembersList = () => {
   }
 
   const renderContent = () => {
+    if (memberDetailSelected) return <CommunityMemberDetail />
     return (
       <View style={containerStyle}>
         <View>

@@ -16,11 +16,13 @@ import { Context as MenuContext } from '../../../../context/MenuContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityMemberDetail = () => {
+  const [initValuesSetDone, setInitValuesSetDone] = useState(false)
+
   const [mute, setMute] = useState(false)
-  const [makeAdmin, setMakeAdmin] = useState(false)
+  const [memberAdmin, setMemberAdmin] = useState(false)
 
   const {
-    state: { memberDetailSelected },
+    state: { memberDetailSelected, communitySelected },
   } = useContext(CommunityContext)
 
   const {
@@ -28,8 +30,18 @@ const CommunityMemberDetail = () => {
   } = useContext(MenuContext)
 
   useEffect(() => {
-    console.log(`memberDetailSelected:`, memberDetailSelected)
-  }, [memberDetailSelected])
+    if (!initValuesSetDone) {
+      let check = memberDetailSelected[0].community.filter((community) => {
+        return community.communityId === communitySelected._id
+      })
+      if (check.length > 0) {
+        const { isAdmin } = check[0]
+        setMemberAdmin(isAdmin)
+      }
+      console.log(`hello world`)
+      setInitValuesSetDone(true)
+    }
+  }, [communitySelected, memberDetailSelected])
 
   const containerStyle = [
     styles.container,
@@ -51,7 +63,8 @@ const CommunityMemberDetail = () => {
   //     },
   //   ]
 
-  const toggleMakeAdmin = () => setMakeAdmin((previousState) => !previousState)
+  const toggleMakeAdmin = () =>
+    setMemberAdmin((previousState) => !previousState)
   const toggleMute = () => setMute((previousState) => !previousState)
 
   const renderContent = () => {
@@ -70,7 +83,7 @@ const CommunityMemberDetail = () => {
                   marginLeft: 5,
                 }}
                 trackColor={{ false: '#494949', true: '#10be00' }}
-                thumbColor={makeAdmin ? '#ffff' : '#ffff'}
+                thumbColor={memberAdmin ? '#ffff' : '#ffff'}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleMute}
                 value={mute}
@@ -84,10 +97,10 @@ const CommunityMemberDetail = () => {
                   marginLeft: 5,
                 }}
                 trackColor={{ false: '#494949', true: '#10be00' }}
-                thumbColor={makeAdmin ? '#ffff' : '#ffff'}
+                thumbColor={memberAdmin ? '#ffff' : '#ffff'}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleMakeAdmin}
-                value={makeAdmin}
+                value={memberAdmin}
               />
             </View>
           </View>

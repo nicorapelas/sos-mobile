@@ -16,8 +16,12 @@ const CommunitySelectedAdminBar = () => {
   } = useContext(UserDataContext)
 
   useEffect(() => {
-    if (communitySelected.adminId === user._id) {
-      setIsAdmin(true)
+    let check = user.community.filter((community) => {
+      return community.communityId === communitySelected._id
+    })
+    if (check.length > 0) {
+      const { isAdmin } = check[0]
+      setIsAdmin(isAdmin)
     }
   }, [communitySelected, user])
 

@@ -3,6 +3,7 @@ import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
+import { Context as UserContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityInvite = () => {
@@ -12,6 +13,10 @@ const CommunityInvite = () => {
     createCommunityInvite,
     setRetry,
   } = useContext(CommunityContext)
+
+  const {
+    state: { user },
+  } = useContext(UserContext)
 
   useEffect(() => {
     if (retry) {
@@ -31,7 +36,7 @@ const CommunityInvite = () => {
       createCommunityInvite({
         communityId: communitySelected._id,
         name: communitySelected.name,
-        adminId: communitySelected.adminId,
+        adminId: user._id,
       })
     }
   }

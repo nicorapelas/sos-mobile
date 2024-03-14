@@ -228,6 +228,10 @@ const setMemberDetailSelected = (dispatch) => (data) => {
   dispatch({ type: 'SET_MEMBER_DETAIL_SELECTED', payload: data })
 }
 
+const updateMemberAdminStatus = (dispatch) => async (data) => {
+  // here
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {

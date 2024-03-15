@@ -6,6 +6,8 @@ const CommunityReducer = (state, action) => {
   switch (action.type) {
     case 'LOADING':
       return { ...state, loading: true }
+    case 'MEMBERS_LIST_LOADING':
+      return { ...state, membersListLoading: true }
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false }
     case 'SET_SUCCESS':
@@ -39,7 +41,11 @@ const CommunityReducer = (state, action) => {
     case 'SET_INIT_LIST_COUNT':
       return { ...state, initListCount: action.payload }
     case 'SET_COMMUNITY_MEMBERS_LIST':
-      return { ...state, communityMembersList: action.payload, loading: false }
+      return {
+        ...state,
+        communityMembersList: action.payload,
+        membersListLoading: false,
+      }
     case 'SET_MEMBERS_LIST_SHOW':
       return { ...state, membersListShow: action.payload }
     case 'SET_MEMBER_DETAIL_SELECTED':
@@ -204,7 +210,7 @@ const setInitListCount = (dispatch) => (data) => {
 }
 
 const fetchCommunityMembersList = (dispatch) => async (data) => {
-  // dispatch({ type: 'LOADING' })
+  dispatch({ type: 'MEMBERS_LIST_LOADING' })
   try {
     const response = await ngrokApi.post(
       '/community/fetch-community-members-list',
@@ -228,8 +234,19 @@ const setMemberDetailSelected = (dispatch) => (data) => {
   dispatch({ type: 'SET_MEMBER_DETAIL_SELECTED', payload: data })
 }
 
-const updateMemberAdminStatus = (dispatch) => async (data) => {
-  // here
+const setMemberAdminStatus = (dispatch) => async (data) => {
+  try {
+    const response = await ngrokApi.post(
+      '/community/set-members-admin-status',
+      data
+    )
+    console.log(response.data)
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
 }
 
 export const { Provider, Context } = createDataContext(
@@ -254,9 +271,11 @@ export const { Provider, Context } = createDataContext(
     fetchCommunityMembersList,
     setMembersListShow,
     setMemberDetailSelected,
+    setMemberAdminStatus,
   },
   {
     loading: false,
+    membersListLoading: false,
     error: '',
     success: '',
     retry: false,

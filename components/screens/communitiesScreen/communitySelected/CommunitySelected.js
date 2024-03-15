@@ -14,6 +14,7 @@ const CommunitySelected = () => {
 
   const {
     state: {
+      membersListLoading,
       communitySelected,
       communitySelectedAdmin,
       showInvite,
@@ -41,6 +42,23 @@ const CommunitySelected = () => {
       }
     }
   }, [initListCount, communitySelected])
+
+  const renderNumberOfMembers = () => {
+    if (membersListLoading) {
+      return <Text style={styles.text}>loading...</Text>
+    }
+    return (
+      <View>
+        <Text style={styles.text}>{communityMembersList.length}</Text>
+        <TouchableOpacity
+          style={styles.viewMembersButton}
+          onPress={() => setMembersListShow(true)}
+        >
+          <Text style={styles.text}>View members</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   const renderContent = () => {
     if (showInvite) return <CommunityInvitation />
@@ -73,17 +91,7 @@ const CommunitySelected = () => {
         </View>
         <View>
           <Text style={styles.label}>Number of members</Text>
-          {communityMembersList.length < 1 ? null : (
-            <View>
-              <Text style={styles.text}>{communityMembersList.length}</Text>
-              <TouchableOpacity
-                style={styles.viewMembersButton}
-                onPress={() => setMembersListShow(true)}
-              >
-                <Text style={styles.text}>View members</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+          {renderNumberOfMembers()}
         </View>
       </View>
     )

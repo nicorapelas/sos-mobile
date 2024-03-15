@@ -23,6 +23,7 @@ const CommunityMemberDetail = () => {
 
   const {
     state: { memberDetailSelected, communitySelected },
+    setMemberAdminStatus,
   } = useContext(CommunityContext)
 
   const {
@@ -38,10 +39,15 @@ const CommunityMemberDetail = () => {
         const { isAdmin } = check[0]
         setMemberAdmin(isAdmin)
       }
-      console.log(`hello world`)
       setInitValuesSetDone(true)
     }
   }, [communitySelected, memberDetailSelected])
+
+  useEffect(() => {
+    if (initValuesSetDone) {
+      setMemberAdminStatus({ memberAdmin })
+    }
+  }, [initValuesSetDone, memberAdmin])
 
   const containerStyle = [
     styles.container,

@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
 
@@ -60,6 +67,31 @@ const CommunitySelected = () => {
     )
   }
 
+  const renderList = () => {
+    if (!communitySelectedAdmin || communitySelectedAdmin.length < 1) {
+      return null
+    }
+    return (
+      <FlatList
+        keyExtractor={(communitySelectedAdmin) => communitySelectedAdmin._id}
+        data={communitySelectedAdmin}
+        renderItem={({ item }) => {
+          return (
+            <ScrollView>
+              <View style={styles.adminListRow}>
+                <FontAwesome
+                  name="user-circle"
+                  style={styles.adminAvatarPlaceHolder}
+                />
+                <Text style={styles.text}>{item.username}</Text>
+              </View>
+            </ScrollView>
+          )
+        }}
+      />
+    )
+  }
+
   const renderContent = () => {
     if (showInvite) return <CommunityInvitation />
     if (membersListShow) return <CommunityMembersList />
@@ -78,7 +110,7 @@ const CommunitySelected = () => {
         <View style={styles.row}>
           <View>
             <Text style={styles.label}>Admin</Text>
-            <Text style={styles.text}>{communitySelectedAdmin.username}</Text>
+            {renderList()}
           </View>
         </View>
         <View style={styles.row}>
@@ -117,6 +149,10 @@ const styles = StyleSheet.create({
     fontSize: normalize(65),
     marginVertical: 20,
   },
+  adminAvatarPlaceHolder: {
+    color: '#c4c4c2',
+    fontSize: normalize(15),
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -147,6 +183,10 @@ const styles = StyleSheet.create({
   },
   viewMembersButton: {
     marginTop: 10,
+  },
+  adminListRow: {
+    flexDirection: 'row',
+    marginBottom: 5,
   },
 })
 

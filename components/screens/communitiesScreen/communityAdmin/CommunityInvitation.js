@@ -20,10 +20,12 @@ const CommunityInvitation = () => {
     setShowInvite(false)
   }
 
-  const formattedPin = communityInvite.pin
-    .toString()
-    .match(/.{1,2}/g)
-    .join(' ')
+  const formattedPin = !communityInvite
+    ? ''
+    : communityInvite.pin
+        .toString()
+        .match(/.{1,2}/g)
+        .join(' ')
 
   const renderContent = () => {
     return (

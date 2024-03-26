@@ -119,6 +119,7 @@ const fetchSelectedCommunityAdmin = (dispatch) => async (data) => {
       '/community/fetch-community-selected-admin',
       data
     )
+    console.log(`response`, response.data)
     dispatch({
       type: 'FETCH_COMMUNITY_SELECTED_ADMIN',
       payload: response.data,
@@ -186,7 +187,6 @@ const joinCommunity = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/join-community', data)
-    console.log(`response`, response.data)
     dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
     dispatch({
       type: 'SET_UPDATE_LIST',
@@ -281,7 +281,7 @@ export const { Provider, Context } = createDataContext(
     retry: false,
     communityList: [],
     communitySelected: null,
-    communitySelectedAdmin: null,
+    communitySelectedAdmin: [],
     communityInvite: null,
     showInvite: false,
     inviteCreatedSuccessfully: false,

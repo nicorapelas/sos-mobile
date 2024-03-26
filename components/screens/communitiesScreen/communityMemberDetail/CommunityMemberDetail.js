@@ -45,9 +45,13 @@ const CommunityMemberDetail = () => {
 
   useEffect(() => {
     if (initValuesSetDone) {
-      setMemberAdminStatus({ memberAdmin })
+      setMemberAdminStatus({
+        memberAdmin,
+        memberId: memberDetailSelected[0]._id,
+        communityId: communitySelected._id,
+      })
     }
-  }, [initValuesSetDone, memberAdmin])
+  }, [initValuesSetDone, memberAdmin, memberDetailSelected, communitySelected])
 
   const containerStyle = [
     styles.container,

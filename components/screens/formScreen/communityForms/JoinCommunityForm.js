@@ -41,6 +41,7 @@ const JoinCommunityForm = () => {
           value={pin}
           onChangeText={(text) => setPin(text.substring(0, 20))}
           placeholder="Enter community pin"
+          keyboardType="phone-pad"
         />
         <SubmitButton onPress={handleSubmit} title="Submit" />
       </KeyboardAvoidingView>

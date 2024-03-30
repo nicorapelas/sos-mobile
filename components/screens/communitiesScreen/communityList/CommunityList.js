@@ -40,7 +40,7 @@ const CommunityList = () => {
   }, [user, initListCount])
 
   useEffect(() => {
-    if (updateList.length > 0) {
+    if (updateList && updateList.length > 0) {
       setCommunityList([])
       setCommunityList(updateList)
       setUpdateList([])

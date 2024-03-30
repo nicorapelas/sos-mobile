@@ -82,8 +82,8 @@ const setError = (dispatch) => (error) => {
   dispatch({ type: 'SET_ERROR', payload: error })
 }
 
-const setSuccess = (dispatch) => (success) => {
-  dispatch({ type: 'SET_SUCCESS', payload: success })
+const setSuccess = (dispatch) => (data) => {
+  dispatch({ type: 'SET_SUCCESS', payload: data })
 }
 
 const setRetry = (dispatch) => (error) => {
@@ -119,7 +119,6 @@ const fetchSelectedCommunityAdmin = (dispatch) => async (data) => {
       '/community/fetch-community-selected-admin',
       data
     )
-    console.log(`response`, response.data)
     dispatch({
       type: 'FETCH_COMMUNITY_SELECTED_ADMIN',
       payload: response.data,
@@ -187,7 +186,14 @@ const joinCommunity = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/join-community', data)
-    dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+    if (response.data.error) {
+      dispatch({ type: 'SET_ERROR', payload: response.data.error })
+      return
+    }
+    if (response.data.success) {
+      dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+      return
+    }
     dispatch({
       type: 'SET_UPDATE_LIST',
       payload: response.data.communityList,
@@ -240,6 +246,21 @@ const setMemberAdminStatus = (dispatch) => async (data) => {
       '/community/set-members-admin-status',
       data
     )
+    dispatch({
+      type: 'FETCH_COMMUNITY_SELECTED_ADMIN',
+      payload: response.data,
+    })
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
+const setMuteStatus = (dispatch) => async (data) => {
+  try {
+    const response = await ngrokApi.post('/community/set-mute', data)
     console.log(response.data)
   } catch (error) {
     dispatch({
@@ -272,6 +293,7 @@ export const { Provider, Context } = createDataContext(
     setMembersListShow,
     setMemberDetailSelected,
     setMemberAdminStatus,
+    setMuteStatus,
   },
   {
     loading: false,

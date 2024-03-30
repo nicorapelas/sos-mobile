@@ -3,6 +3,7 @@ import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import HeaderBackButton from './HeaderBackButton'
 import HeaderMenuButton from './HeaderMenuButton'
+import HeaderUsername from './HeaderUsername'
 import { Context as NavContext } from '../../../context/NavContext'
 import { Context as FormContext } from '../../../context/FormContext'
 
@@ -69,6 +70,7 @@ const Header = () => {
       <View style={styles.container}>
         <View style={styles.row}>
           <HeaderBackButton />
+          <HeaderUsername />
           {renderCancelButton()}
           {renderLabel()}
           <HeaderMenuButton />

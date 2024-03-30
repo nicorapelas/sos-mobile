@@ -20,6 +20,7 @@ export default function AppScreens() {
   const {
     state: { tokenValid, redirectToLogin },
     tokenValidation,
+    setRedirectToLogin,
   } = useContext(AuthContext)
 
   useEffect(() => {
@@ -27,8 +28,16 @@ export default function AppScreens() {
   }, [])
 
   useEffect(() => {
-    if (redirectToLogin) setTriggerRedirectToLogin(true)
+    if (redirectToLogin) {
+      setTriggerRedirectToLogin(true)
+      setRedirectToLogin(false)
+    }
   }, [redirectToLogin])
+
+  useEffect(() => {
+    console.log(`tokenValid:`, tokenValid)
+    console.log(`triggerRedirectToLogin:`, triggerRedirectToLogin)
+  }, [tokenValid, triggerRedirectToLogin])
 
   const invalidTokenScreenSelector = () => {
     return (

@@ -7,7 +7,7 @@ import { Context as UserDataContext } from '../../../../context/UserDataContext'
 
 const CommunitySelectedAdminBar = () => {
   const {
-    state: { communitySelected },
+    state: { communitySelectedAdmin },
   } = useContext(CommunityContext)
 
   const {
@@ -16,14 +16,15 @@ const CommunitySelectedAdminBar = () => {
   } = useContext(UserDataContext)
 
   useEffect(() => {
-    let check = user.community.filter((community) => {
-      return community.communityId === communitySelected._id
+    let check = communitySelectedAdmin.filter((admin) => {
+      return admin._id === user._id
     })
     if (check.length > 0) {
-      const { isAdmin } = check[0]
-      setIsAdmin(isAdmin)
+      setIsAdmin(true)
+    } else {
+      setIsAdmin(false)
     }
-  }, [communitySelected, user])
+  }, [communitySelectedAdmin, user])
 
   const renderContent = () => {
     if (!isAdmin) return null

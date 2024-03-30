@@ -75,7 +75,11 @@ const fetchUser = (dispatch) => async () => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.get('/user/fetch-user')
-    dispatch({ type: 'FETCH_USER', payload: response.data })
+    if (response.data.error) {
+      dispatch({ type: 'ADD_ERROR', payload: response.data.error })
+    } else {
+      dispatch({ type: 'FETCH_USER', payload: response.data })
+    }
   } catch (error) {
     dispatch({
       type: 'ADD_ERROR',

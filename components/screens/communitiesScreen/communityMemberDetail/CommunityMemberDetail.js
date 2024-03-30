@@ -1,81 +1,89 @@
 import React, { useState, useContext, useEffect } from 'react'
-import {
-  View,
-  FlatList,
-  ScrollView,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Switch,
-} from 'react-native'
+import { View, Text, StyleSheet, Switch } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
-import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { Context as MenuContext } from '../../../../context/MenuContext'
+import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityMemberDetail = () => {
-  const [initValuesSetDone, setInitValuesSetDone] = useState(false)
-
   const [mute, setMute] = useState(false)
+  const [memberAdminTrigger, setMemberAdminTrigger] = useState(false)
   const [memberAdmin, setMemberAdmin] = useState(false)
+  const [isLastAdmin, setIsLastAdmin] = useState(false)
+  const [muteTrigger, setMuteTrigger] = useState(false)
 
   const {
-    state: { memberDetailSelected, communitySelected },
+    state: { memberDetailSelected, communitySelected, communitySelectedAdmin },
     setMemberAdminStatus,
+    setMuteStatus,
   } = useContext(CommunityContext)
 
   const {
     state: { menuExpanded, useStaticMenu },
   } = useContext(MenuContext)
 
-  useEffect(() => {
-    if (!initValuesSetDone) {
-      let check = memberDetailSelected[0].community.filter((community) => {
-        return community.communityId === communitySelected._id
-      })
-      if (check.length > 0) {
-        const { isAdmin } = check[0]
-        setMemberAdmin(isAdmin)
-      }
-      setInitValuesSetDone(true)
-    }
-  }, [communitySelected, memberDetailSelected])
+  const {
+    state: { user },
+  } = useContext(UserDataContext)
 
   useEffect(() => {
-    if (initValuesSetDone) {
+    let check = communitySelectedAdmin.filter((admin) => {
+      return admin._id === memberDetailSelected[0]._id
+    })
+    if (check.length > 0) {
+      setMemberAdmin(true)
+    } else {
+      setMemberAdmin(false)
+    }
+  }, [communitySelectedAdmin, memberDetailSelected])
+
+  useEffect(() => {
+    if (communitySelectedAdmin.length === 1) {
+      let check = communitySelectedAdmin.filter((admin) => {
+        return admin._id === memberDetailSelected[0]._id
+      })
+      if (check.length > 0) {
+        setIsLastAdmin(true)
+      } else {
+        setIsLastAdmin(false)
+      }
+    }
+  }, [communitySelectedAdmin, memberDetailSelected])
+
+  useEffect(() => {
+    if (memberAdminTrigger) {
       setMemberAdminStatus({
         memberAdmin,
         memberId: memberDetailSelected[0]._id,
         communityId: communitySelected._id,
       })
+      setMemberAdminTrigger(false)
     }
-  }, [initValuesSetDone, memberAdmin, memberDetailSelected, communitySelected])
+  }, [memberAdminTrigger, memberAdmin, memberDetailSelected, communitySelected])
+
+  useEffect(() => {
+    if (muteTrigger) {
+      setMuteStatus({ mute: mute })
+    }
+    setMuteTrigger(false)
+  }, [muteTrigger, mute])
 
   const containerStyle = [
     styles.container,
     !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
   ]
 
-  //   memberDetailSelected: [
-  //     {
-  //       __v: 0,
-  //       _id: '65eb1dfdef52f5cd78396c23',
-  //       avatar: '',
-  //       community: [[Object]],
-  //       created: '2024-03-08T14:17:33.633Z',
-  //       emailAddress: 'nicorapelas@gmail.com',
-  //       emailAddressVerified: true,
-  //       phoneNumberVerified: false,
-  //       termsAndConditionsAccepted: false,
-  //       username: 'Bob Smith',
-  //     },
-  //   ]
-
-  const toggleMakeAdmin = () =>
+  const toggleMakeAdmin = () => {
     setMemberAdmin((previousState) => !previousState)
-  const toggleMute = () => setMute((previousState) => !previousState)
+    setMemberAdminTrigger(true)
+  }
+
+  const toggleMute = () => {
+    setMute((previousState) => !previousState)
+    setMuteTrigger(true)
+  }
 
   const renderContent = () => {
     const { username } = memberDetailSelected[0]
@@ -85,20 +93,6 @@ const CommunityMemberDetail = () => {
         <FontAwesome name="user-circle" style={styles.avatarPlaceHolder} />
         <View style={styles.optionsContainerRow}>
           <View style={styles.optionsContainerColumn}>
-            <View style={styles.optionRow}>
-              <Text style={styles.optionText}>Mute</Text>
-              <Switch
-                style={{
-                  transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
-                  marginLeft: 5,
-                }}
-                trackColor={{ false: '#494949', true: '#10be00' }}
-                thumbColor={memberAdmin ? '#ffff' : '#ffff'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleMute}
-                value={mute}
-              />
-            </View>
             <View style={styles.optionRow}>
               <Text style={styles.optionText}>Admin</Text>
               <Switch
@@ -111,8 +105,25 @@ const CommunityMemberDetail = () => {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleMakeAdmin}
                 value={memberAdmin}
+                disabled={isLastAdmin}
               />
             </View>
+            {memberAdmin ? null : (
+              <View style={styles.optionRow}>
+                <Text style={styles.optionText}>Mute</Text>
+                <Switch
+                  style={{
+                    transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
+                    marginLeft: 5,
+                  }}
+                  trackColor={{ false: '#494949', true: '#10be00' }}
+                  thumbColor={memberAdmin ? '#ffff' : '#ffff'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleMute}
+                  value={mute}
+                />
+              </View>
+            )}
           </View>
         </View>
       </View>

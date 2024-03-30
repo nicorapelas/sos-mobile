@@ -1,13 +1,16 @@
 import { useContext, useEffect } from 'react'
 
+import { Context as AuthContext } from '../../context/AuthContext'
 import { Context as UserDataContext } from '../../context/UserDataContext'
 import { Context as NavContext } from '../../context/NavContext'
 import { Context as FormContext } from '../../context/FormContext'
 import { Context as CommunityContext } from '../../context/CommunityContext'
 
 const DataDrvRedirecting = () => {
+  const { signout } = useContext(AuthContext)
+
   const {
-    state: { user },
+    state: { error, user },
   } = useContext(UserDataContext)
 
   const { setNavTabSelected } = useContext(NavContext)
@@ -18,6 +21,12 @@ const DataDrvRedirecting = () => {
     state: { success: communitySuccess },
     setSuccess: setSuccessCommunity,
   } = useContext(CommunityContext)
+
+  useEffect(() => {
+    if (error === 'noUserLogedIn') {
+      signout()
+    }
+  }, [error])
 
   useEffect(() => {
     if (user) {
@@ -41,7 +50,6 @@ const DataDrvRedirecting = () => {
       setSuccessCommunity('')
     }
     if (communitySuccess === 'joinedSuccessfully') {
-      console.log(`hello world`)
       setFormSelected('')
       setNavTabSelected('communities')
       setSuccessCommunity('')

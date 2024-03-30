@@ -16,6 +16,7 @@ const FormField = ({
         onChangeText={onChangeText}
         value={value}
         placeholder={placeholder}
+        keyboardType="numeric"
         // {...textInputProps}
       />
     </View>

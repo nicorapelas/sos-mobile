@@ -5,6 +5,7 @@ import { Provider as NavProvider } from './context/NavContext'
 import { Provider as MenuProvider } from './context/MenuContext'
 import { Provider as FormProvider } from './context/FormContext'
 import { Provider as CommunityProvider } from './context/CommunityContext'
+import { Provider as ModalProvider } from './context/ModalContext'
 
 import AppScreens from './AppScreens'
 
@@ -17,7 +18,9 @@ export default function App() {
             <MenuProvider>
               <FormProvider>
                 <CommunityProvider>
-                  <AppScreens />
+                  <ModalProvider>
+                    <AppScreens />
+                  </ModalProvider>
                 </CommunityProvider>
               </FormProvider>
             </MenuProvider>

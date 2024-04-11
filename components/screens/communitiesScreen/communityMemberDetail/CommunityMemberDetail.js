@@ -12,10 +12,17 @@ const CommunityMemberDetail = () => {
   const [memberAdminTrigger, setMemberAdminTrigger] = useState(false)
   const [memberAdmin, setMemberAdmin] = useState(false)
   const [isLastAdmin, setIsLastAdmin] = useState(false)
+  const [isAdminSwitchDisable, setIsAdminSwitchDisables] = useState(false)
   const [muteTrigger, setMuteTrigger] = useState(false)
+  const [muteSwitchDisabled, setMuteSwitchDisabled] = useState(false)
 
   const {
-    state: { memberDetailSelected, communitySelected, communitySelectedAdmin },
+    state: {
+      memberOptionUpdateLoading,
+      memberDetailSelected,
+      communitySelected,
+      communitySelectedAdmin,
+    },
     setMemberAdminStatus,
     setMuteStatus,
   } = useContext(CommunityContext)
@@ -65,10 +72,19 @@ const CommunityMemberDetail = () => {
 
   useEffect(() => {
     if (muteTrigger) {
-      setMuteStatus({ mute: mute })
+      setMuteStatus({ mute: mute, memberId: memberDetailSelected[0]._id })
     }
     setMuteTrigger(false)
   }, [muteTrigger, mute])
+
+  useEffect(() => {
+    setIsAdminSwitchDisables(
+      isLastAdmin || memberOptionUpdateLoading ? true : false
+    )
+    setMuteSwitchDisabled(
+      memberAdmin || memberOptionUpdateLoading ? true : false
+    )
+  }, [isLastAdmin, memberOptionUpdateLoading, memberAdmin])
 
   const containerStyle = [
     styles.container,
@@ -86,6 +102,7 @@ const CommunityMemberDetail = () => {
   }
 
   const renderContent = () => {
+    if (!memberDetailSelected || memberDetailSelected.length < 1) return null
     const { username } = memberDetailSelected[0]
     return (
       <View style={containerStyle}>
@@ -105,25 +122,24 @@ const CommunityMemberDetail = () => {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleMakeAdmin}
                 value={memberAdmin}
-                disabled={isLastAdmin}
+                disabled={isAdminSwitchDisable}
               />
             </View>
-            {memberAdmin ? null : (
-              <View style={styles.optionRow}>
-                <Text style={styles.optionText}>Mute</Text>
-                <Switch
-                  style={{
-                    transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
-                    marginLeft: 5,
-                  }}
-                  trackColor={{ false: '#494949', true: '#10be00' }}
-                  thumbColor={memberAdmin ? '#ffff' : '#ffff'}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleMute}
-                  value={mute}
-                />
-              </View>
-            )}
+            <View style={styles.optionRow}>
+              <Text style={styles.optionText}>Mute</Text>
+              <Switch
+                style={{
+                  transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
+                  marginLeft: 5,
+                }}
+                trackColor={{ false: '#494949', true: '#10be00' }}
+                thumbColor={memberAdmin ? '#ffff' : '#ffff'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleMute}
+                value={mute}
+                disabled={muteSwitchDisabled}
+              />
+            </View>
           </View>
         </View>
       </View>

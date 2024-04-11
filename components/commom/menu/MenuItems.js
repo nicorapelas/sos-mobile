@@ -7,6 +7,7 @@ import { Context as MenuContext } from '../../../context/MenuContext'
 const MenuItems = () => {
   const {
     state: { menuExpanded, useStaticMenu },
+    setMenuExpanded,
   } = useContext(MenuContext)
 
   const { signout } = useContext(AuthContext)
@@ -26,6 +27,7 @@ const MenuItems = () => {
   }, [useStaticMenu, menuExpanded])
 
   const handleSignout = () => {
+    setMenuExpanded(false)
     signout()
   }
 

@@ -13,6 +13,7 @@ import moment from 'moment'
 import CommunitySelectedAdminBar from '../communityAdmin/CommunitySelectedAdimBar'
 import CommunityInvitation from '../communityAdmin/CommunityInvitation'
 import CommunityMembersList from '../communityMemberList/CommunityMembersList'
+import ExitCommunity from '../exitCommunity/ExitCommunity'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { normalize } from '../../../../utils/fontUtils'
 
@@ -121,10 +122,11 @@ const CommunitySelected = () => {
             </Text>
           </View>
         </View>
-        <View>
-          <Text style={styles.label}>Number of members</Text>
+        <View style={styles.NumOfMemberContainer}>
+          <Text style={styles.NumOfMemberLabel}>Number of members</Text>
           {renderNumberOfMembers()}
         </View>
+        <ExitCommunity />
       </View>
     )
   }
@@ -179,6 +181,13 @@ const styles = StyleSheet.create({
     fontSize: normalize(15),
     marginBottom: 7,
     textAlign: 'center',
+  },
+  NumOfMemberLabel: {
+    color: '#c4c4c2',
+    fontWeight: '700',
+    fontSize: normalize(15),
+    marginBottom: 7,
+    textAlign: 'center',
     marginTop: 20,
   },
   viewMembersButton: {
@@ -187,6 +196,11 @@ const styles = StyleSheet.create({
   adminListRow: {
     flexDirection: 'row',
     marginBottom: 5,
+  },
+  NumOfMemberContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#c4c4c2',
+    paddingBottom: 20,
   },
 })
 

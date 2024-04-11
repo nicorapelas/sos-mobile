@@ -8,6 +8,8 @@ const CommunityReducer = (state, action) => {
       return { ...state, loading: true }
     case 'MEMBERS_LIST_LOADING':
       return { ...state, membersListLoading: true }
+    case 'MEMBER_OPTION_UPDATE_LOADING':
+      return { ...state, memberOptionUpdateLoading: true }
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false }
     case 'SET_SUCCESS':
@@ -27,6 +29,7 @@ const CommunityReducer = (state, action) => {
         ...state,
         communitySelectedAdmin: action.payload,
         loading: false,
+        memberOptionUpdateLoading: false,
       }
     case 'SET_COMMUNITY_INVITE':
       return { ...state, communityInvite: action.payload, loading: false }
@@ -49,7 +52,11 @@ const CommunityReducer = (state, action) => {
     case 'SET_MEMBERS_LIST_SHOW':
       return { ...state, membersListShow: action.payload }
     case 'SET_MEMBER_DETAIL_SELECTED':
-      return { ...state, memberDetailSelected: action.payload }
+      return {
+        ...state,
+        memberDetailSelected: action.payload,
+        memberOptionUpdateLoading: false,
+      }
     default:
       return state
   }
@@ -241,6 +248,7 @@ const setMemberDetailSelected = (dispatch) => (data) => {
 }
 
 const setMemberAdminStatus = (dispatch) => async (data) => {
+  dispatch({ type: 'MEMBER_OPTION_UPDATE_LOADING' })
   try {
     const response = await ngrokApi.post(
       '/community/set-members-admin-status',
@@ -259,9 +267,10 @@ const setMemberAdminStatus = (dispatch) => async (data) => {
 }
 
 const setMuteStatus = (dispatch) => async (data) => {
+  dispatch({ type: 'MEMBER_OPTION_UPDATE_LOADING' })
   try {
     const response = await ngrokApi.post('/community/set-mute', data)
-    console.log(response.data)
+    dispatch({ type: 'SET_MEMBER_DETAIL_SELECTED', payload: response.data })
   } catch (error) {
     dispatch({
       type: 'SET_ERROR',
@@ -298,6 +307,7 @@ export const { Provider, Context } = createDataContext(
   {
     loading: false,
     membersListLoading: false,
+    memberOptionUpdateLoading: false,
     error: '',
     success: '',
     retry: false,

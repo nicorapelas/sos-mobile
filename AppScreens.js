@@ -11,7 +11,7 @@ import Welcome from './components/screens/authScreens/Welcome'
 import MainScreen from './components/screens/main/MainScreen'
 
 export default function AppScreens() {
-  const [triggerRedirectToLogin, setTriggerRedirectToLogin] = useState(false)
+  const [accessGranted, setAccessGranted] = useState(false)
 
   const {
     state: { appLoading },
@@ -20,7 +20,6 @@ export default function AppScreens() {
   const {
     state: { tokenValid, redirectToLogin },
     tokenValidation,
-    setRedirectToLogin,
   } = useContext(AuthContext)
 
   useEffect(() => {
@@ -28,16 +27,14 @@ export default function AppScreens() {
   }, [])
 
   useEffect(() => {
-    if (redirectToLogin) {
-      setTriggerRedirectToLogin(true)
-      setRedirectToLogin(false)
-    }
-  }, [redirectToLogin])
+    setAccessGranted(tokenValid)
+  }, [tokenValid])
 
   useEffect(() => {
-    console.log(`tokenValid:`, tokenValid)
-    console.log(`triggerRedirectToLogin:`, triggerRedirectToLogin)
-  }, [tokenValid, triggerRedirectToLogin])
+    if (redirectToLogin) {
+      setAccessGranted(false)
+    }
+  }, [redirectToLogin])
 
   const invalidTokenScreenSelector = () => {
     return (
@@ -59,10 +56,7 @@ export default function AppScreens() {
 
   const renderContent = () => {
     if (appLoading) return <Loader />
-    if (triggerRedirectToLogin) {
-      return <Welcome />
-    }
-    switch (tokenValid) {
+    switch (accessGranted) {
       case false:
         return invalidTokenScreenSelector()
       case true:

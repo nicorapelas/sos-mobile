@@ -5,15 +5,21 @@ import Header from '../../commom/header/Header'
 import Navbar from '../../commom/navbar/NavBar'
 import MainContentRender from './MainContentRender'
 
-import { Context as UserDataContext } from '../../../context/UserDataContext'
 import { Context as FormContext } from '../../../context/FormContext'
+import { Context as ModalContext } from '../../../context/ModalContext'
 
 const MainScreen = () => {
-  const {} = useContext(UserDataContext)
-
   const {
     state: { formSelected },
   } = useContext(FormContext)
+
+  const {
+    state: { modalContentSelected },
+  } = useContext(ModalContext)
+
+  useEffect(() => {
+    console.log(modalContentSelected)
+  }, [modalContentSelected])
 
   const renderContent = () => {
     return (

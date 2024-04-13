@@ -279,6 +279,32 @@ const setMuteStatus = (dispatch) => async (data) => {
   }
 }
 
+const exitCommunity = (dispatch) => async (data) => {
+  console.log(`at exit action`)
+  try {
+    const response = await ngrokApi.post('/community/exit-community', data)
+    console.log(`response:`, response.data)
+    if (response.data.error) {
+      dispatch({ type: 'SET_ERROR', payload: response.data.error })
+      return
+    }
+    if (response.data.success) {
+      dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+      return
+    }
+    dispatch({
+      type: 'SET_UPDATE_LIST',
+      payload: response.data.communityList,
+    })
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -303,6 +329,7 @@ export const { Provider, Context } = createDataContext(
     setMemberDetailSelected,
     setMemberAdminStatus,
     setMuteStatus,
+    exitCommunity,
   },
   {
     loading: false,

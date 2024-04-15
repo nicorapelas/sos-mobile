@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native'
 
 import { Context as UserDataContext } from '../../../../context/UserDataContext'

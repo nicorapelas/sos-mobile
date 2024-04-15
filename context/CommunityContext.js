@@ -199,13 +199,12 @@ const joinCommunity = (dispatch) => async (data) => {
     }
     if (response.data.success) {
       dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+      dispatch({
+        type: 'SET_UPDATE_LIST',
+        payload: response.data.communityList,
+      })
       return
     }
-    dispatch({
-      type: 'SET_UPDATE_LIST',
-      payload: response.data.communityList,
-    })
-    return
   } catch (error) {
     dispatch({
       type: 'SET_ERROR',
@@ -290,13 +289,12 @@ const exitCommunity = (dispatch) => async (data) => {
     }
     if (response.data.success) {
       dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+      dispatch({
+        type: 'SET_UPDATE_LIST',
+        payload: response.data.communityList,
+      })
       return
     }
-    dispatch({
-      type: 'SET_UPDATE_LIST',
-      payload: response.data.communityList,
-    })
-    return
   } catch (error) {
     dispatch({
       type: 'SET_ERROR',

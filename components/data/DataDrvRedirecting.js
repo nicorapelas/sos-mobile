@@ -47,6 +47,7 @@ const DataDrvRedirecting = () => {
   }, [user])
 
   useEffect(() => {
+    console.log(`communitySuccess:`, communitySuccess)
     if (communitySuccess === 'communityCreatedSuccefully') {
       setFormSelected('')
       setNavTabSelected('communities')

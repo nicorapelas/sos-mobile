@@ -1,10 +1,21 @@
-import React, { useContext, useEffect } from 'react'
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native'
 
 import { Context as AuthContext } from '../../../context/AuthContext'
 import { Context as UserDataContext } from '../../../context/UserDataContext'
 
 const LoginStatus = () => {
+  const [newOtpRequestTimeout, setNewOtpRequestTimeout] = useState(false)
+  const [showMessage, setShowMessage] = useState(false)
+
   const {
     state: { otpCode, status },
     setOtpCode,
@@ -16,6 +27,11 @@ const LoginStatus = () => {
   const {
     state: { userPhoneNumber, userEmailAddress },
   } = useContext(UserDataContext)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setNewOtpRequestTimeout(true), 10000)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleOtpSubmit = () => {
     if (otpCode.length !== 6) {
@@ -38,9 +54,47 @@ const LoginStatus = () => {
     }
   }
 
-  const renderStatus = () => {
+  const handleNoOtpPress = () => {
+    clearStatus()
+    setOtpCode('')
+  }
+
+  const noOtp = () => {
+    if (!newOtpRequestTimeout || otpCode.length > 0) return null
     return (
-      <View style={styles.container}>
+      <View>
+        <Text style={styles.text}>Didn't receive an OTP?</Text>
+        <TouchableOpacity onPress={() => setShowMessage(true)}>
+          <Text style={styles.button}>Click here.</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  const noOtpMessage = () => {
+    return (
+      <View>
+        <Text>
+          The OTP request via SMS is currently unavailable. Please retry, or
+          request an OTP via email address
+        </Text>
+        <TouchableOpacity onPress={handleNoOtpPress}>
+          <Text style={styles.button}>OK</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  const renderStatus = () => {
+    if (showMessage) {
+      return noOtpMessage()
+    }
+    return (
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
         <Text style={styles.text}>
           OTP sent successfully, please enter your verification code
         </Text>
@@ -52,7 +106,8 @@ const LoginStatus = () => {
           placeholder="Verification code"
         />
         <Button title="Submit" onPress={handleOtpSubmit} />
-      </View>
+        {noOtp()}
+      </KeyboardAvoidingView>
     )
   }
 
@@ -78,6 +133,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '80%',
     textAlign: 'center',
+  },
+  button: {
+    color: '#0000EE',
+    textAlign: 'center',
+    fontSize: 16,
+    marginTop: 10,
   },
 })
 

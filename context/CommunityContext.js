@@ -193,6 +193,7 @@ const joinCommunity = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/join-community', data)
+    console.log(`join response`, response.data)
     if (response.data.error) {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return
@@ -282,7 +283,7 @@ const exitCommunity = (dispatch) => async (data) => {
   console.log(`at exit action`)
   try {
     const response = await ngrokApi.post('/community/exit-community', data)
-    console.log(`response:`, response.data)
+    console.log(`exit response:`, response.data)
     if (response.data.error) {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return

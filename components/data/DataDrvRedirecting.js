@@ -21,6 +21,7 @@ const DataDrvRedirecting = () => {
   const {
     state: { success: communitySuccess },
     setSuccess: setSuccessCommunity,
+    setCommunitySelected,
   } = useContext(CommunityContext)
 
   const { setModalContentSelected } = useContext(ModalContext)
@@ -62,6 +63,7 @@ const DataDrvRedirecting = () => {
       setNavTabSelected('communities')
       setModalContentSelected('')
       setSuccessCommunity('')
+      setCommunitySelected(null)
     }
   }, [communitySuccess])
 

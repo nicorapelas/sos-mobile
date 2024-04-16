@@ -73,10 +73,10 @@ const LoginStatus = () => {
 
   const noOtpMessage = () => {
     return (
-      <View>
-        <Text>
-          The OTP request via SMS is currently unavailable. Please retry, or
-          request an OTP via email address
+      <View style={styles.container}>
+        <Text style={styles.text}>
+          The OTP request via SMS is currently unavailable. Please try again
+          later, or request an OTP via email address
         </Text>
         <TouchableOpacity onPress={handleNoOtpPress}>
           <Text style={styles.button}>OK</Text>
@@ -93,7 +93,6 @@ const LoginStatus = () => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
       >
         <Text style={styles.text}>
           OTP sent successfully, please enter your verification code

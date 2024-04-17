@@ -1,5 +1,11 @@
 import React, { useContext } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import moment from 'moment'
 
@@ -43,7 +49,13 @@ const CommunityInvitation = () => {
             <Text style={styles.text}>NOTE: Pin expires in</Text>
           </View>
           <InviteCountdown />
-          <View style={styles.textPinContainer}>
+          <View
+            style={
+              Platform.OS === 'ios'
+                ? styles.textPinContainerIos
+                : styles.textPinContainer
+            }
+          >
             <Text style={styles.label}>Joining pin</Text>
             <Text style={styles.text}>{formattedPin}</Text>
             <Text style={styles.label}>Date & Time created</Text>
@@ -107,6 +119,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textPinContainer: {
+    flex: 3,
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  textPinContainerIos: {
     flex: 3,
     justifyContent: 'center',
   },

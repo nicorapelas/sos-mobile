@@ -72,32 +72,21 @@ const CommunitySelected = () => {
     if (!communitySelectedAdmin || communitySelectedAdmin.length < 1) {
       return null
     }
-    return (
-      <FlatList
-        keyExtractor={(communitySelectedAdmin) => communitySelectedAdmin._id}
-        data={communitySelectedAdmin}
-        renderItem={({ item }) => {
-          return (
-            <ScrollView>
-              <View style={styles.adminListRow}>
-                <FontAwesome
-                  name="user-circle"
-                  style={styles.adminAvatarPlaceHolder}
-                />
-                <Text style={styles.text}>{item.username}</Text>
-              </View>
-            </ScrollView>
-          )
-        }}
-      />
-    )
+    return communitySelectedAdmin.map((admin) => {
+      return (
+        <View style={styles.adminListRow} key={admin._id}>
+          <FontAwesome name="user-circle" />
+          <Text style={styles.text}>{admin.username}</Text>
+        </View>
+      )
+    })
   }
 
   const renderContent = () => {
     if (showInvite) return <CommunityInvitation />
     if (membersListShow) return <CommunityMembersList />
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <CommunitySelectedAdminBar />
         <View style={styles.avatar}>
           <FontAwesome style={styles.avatarPlaceHolder} name="group" />
@@ -127,7 +116,7 @@ const CommunitySelected = () => {
           {renderNumberOfMembers()}
         </View>
         <ExitCommunity />
-      </View>
+      </ScrollView>
     )
   }
 
@@ -137,6 +126,7 @@ const CommunitySelected = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 25,
   },
   avatar: {
     flexDirection: 'row',
@@ -150,10 +140,6 @@ const styles = StyleSheet.create({
     color: '#c4c4c2',
     fontSize: normalize(65),
     marginVertical: 20,
-  },
-  adminAvatarPlaceHolder: {
-    color: '#c4c4c2',
-    fontSize: normalize(15),
   },
   row: {
     flexDirection: 'row',
@@ -181,6 +167,9 @@ const styles = StyleSheet.create({
     fontSize: normalize(15),
     marginBottom: 7,
     textAlign: 'center',
+  },
+  adminListContainer: {
+    maxHeight: 60,
   },
   NumOfMemberLabel: {
     color: '#c4c4c2',

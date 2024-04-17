@@ -1,5 +1,12 @@
 import React, { useContext } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Share } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Share,
+  Platform,
+} from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
@@ -22,7 +29,6 @@ const CommunityInvitation = () => {
         message,
         // Optionally, you can add URL or title here if needed
       })
-
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           // Shared with activity type of result.activityType
@@ -41,7 +47,9 @@ const CommunityInvitation = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={Platform.OS === 'ios' ? styles.containerIos : styles.container}
+    >
       <TouchableOpacity onPress={handlePressShare} style={styles.button}>
         <Text style={styles.text}>Share</Text>
         <MaterialCommunityIcons name="share-variant" style={styles.icon} />
@@ -52,6 +60,12 @@ const CommunityInvitation = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 25,
+  },
+  containerIos: {
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'center',

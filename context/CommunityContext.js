@@ -40,7 +40,7 @@ const CommunityReducer = (state, action) => {
     case 'SET_INVITE_TIME_REMAINING':
       return { ...state, inviteTimeRemaining: action.payload }
     case 'SET_UPDATE_LIST':
-      return { ...state, updateList: action.payload }
+      return { ...state, updateList: action.payload, loading: false }
     case 'SET_INIT_LIST_COUNT':
       return { ...state, initListCount: action.payload }
     case 'SET_COMMUNITY_MEMBERS_LIST':
@@ -57,6 +57,8 @@ const CommunityReducer = (state, action) => {
         memberDetailSelected: action.payload,
         memberOptionUpdateLoading: false,
       }
+    case 'SET_CLEAR_COMMUNITY_LIST':
+      return { ...state, clearCommunityList: action.payload }
     default:
       return state
   }
@@ -193,7 +195,6 @@ const joinCommunity = (dispatch) => async (data) => {
   dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/join-community', data)
-    console.log(`join response`, response.data)
     if (response.data.error) {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return
@@ -280,21 +281,24 @@ const setMuteStatus = (dispatch) => async (data) => {
 }
 
 const exitCommunity = (dispatch) => async (data) => {
-  console.log(`at exit action`)
+  dispatch({ type: 'LOADING' })
   try {
     const response = await ngrokApi.post('/community/exit-community', data)
-    console.log(`exit response:`, response.data)
     if (response.data.error) {
       dispatch({ type: 'SET_ERROR', payload: response.data.error })
       return
     }
     if (response.data.success) {
       dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
-      dispatch({
-        type: 'SET_UPDATE_LIST',
-        payload: response.data.communityList,
-      })
-      return
+      if (response.data.communityList.length > 0) {
+        dispatch({
+          type: 'SET_UPDATE_LIST',
+          payload: response.data.communityList,
+        })
+        return
+      } else {
+        dispatch({ type: 'SET_CLEAR_COMMUNITY_LIST', payload: true })
+      }
     }
   } catch (error) {
     dispatch({
@@ -302,6 +306,10 @@ const exitCommunity = (dispatch) => async (data) => {
       payload: error,
     })
   }
+}
+
+const setClearCommunityList = (dispatch) => (data) => {
+  dispatch({ type: 'SET_CLEAR_COMMUNITY_LIST', payload: data })
 }
 
 export const { Provider, Context } = createDataContext(
@@ -329,6 +337,7 @@ export const { Provider, Context } = createDataContext(
     setMemberAdminStatus,
     setMuteStatus,
     exitCommunity,
+    setClearCommunityList,
   },
   {
     loading: false,
@@ -349,5 +358,6 @@ export const { Provider, Context } = createDataContext(
     communityMembersList: [],
     membersListShow: false,
     memberDetailSelected: null,
+    clearCommunityList: false,
   }
 )

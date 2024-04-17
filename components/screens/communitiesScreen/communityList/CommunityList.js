@@ -13,11 +13,12 @@ const CommunityList = () => {
   } = useContext(UserDataContext)
 
   const {
-    state: { communityList, updateList, initListCount },
+    state: { communityList, updateList, initListCount, clearCommunityList },
     setCommunityList,
     fetchSelectedCommunity,
     setUpdateList,
     setInitListCount,
+    setClearCommunityList,
   } = useContext(CommunityContext)
 
   const {
@@ -46,6 +47,14 @@ const CommunityList = () => {
       setUpdateList([])
     }
   }, [updateList])
+
+  useEffect(() => {
+    if (clearCommunityList) {
+      setCommunityList([])
+      setUpdateList([])
+      setClearCommunityList(false)
+    }
+  }, [clearCommunityList])
 
   const handlePress = (id) => {
     fetchSelectedCommunity(id)

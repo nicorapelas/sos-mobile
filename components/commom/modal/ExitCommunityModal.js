@@ -22,6 +22,7 @@ const ExitCommunityModal = () => {
   }
 
   const renderContent = () => {
+    if (!communitySelected || communitySelected.length < 1) return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>

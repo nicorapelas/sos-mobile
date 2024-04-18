@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, Switch } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Switch,
+  Platform,
+  ActivityIndicator,
+} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
@@ -86,6 +93,12 @@ const CommunityMemberDetail = () => {
     )
   }, [isLastAdmin, memberOptionUpdateLoading, memberAdmin])
 
+  useEffect(() => {
+    if (memberAdmin || isLastAdmin) {
+      setMute(false)
+    }
+  }, [memberAdmin, isLastAdmin])
+
   const containerStyle = [
     styles.container,
     !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
@@ -101,6 +114,53 @@ const CommunityMemberDetail = () => {
     setMuteTrigger(true)
   }
 
+  const iosSwitch = (option) => {
+    return (
+      <Switch
+        style={{
+          transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
+          marginLeft: 5,
+        }}
+        trackColor={{ false: '#494949', true: '#10be00' }}
+        thumbColor={'#ffff'}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={option === 'admin' ? toggleMakeAdmin : toggleMute}
+        value={option === 'admin' ? memberAdmin : mute}
+        disabled={
+          option === 'admin' ? isAdminSwitchDisable : muteSwitchDisabled
+        }
+      />
+    )
+  }
+
+  const androidSwitch = (option) => {
+    if (memberOptionUpdateLoading)
+      return (
+        <ActivityIndicator
+          size="small"
+          color="#0000ff"
+          style={{
+            margin: 14,
+          }}
+        />
+      )
+    return (
+      <Switch
+        style={{
+          transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }],
+          marginLeft: 5,
+        }}
+        trackColor={{ false: '#494949', true: '#10be00' }}
+        thumbColor={'#c4c4c2'}
+        onValueChange={option === 'admin' ? toggleMakeAdmin : toggleMute}
+        value={option === 'admin' ? memberAdmin : mute}
+        disabled={
+          option === 'admin' ? isAdminSwitchDisable : muteSwitchDisabled
+        }
+      />
+    )
+  }
+
   const renderContent = () => {
     if (!memberDetailSelected || memberDetailSelected.length < 1) return null
     const { username } = memberDetailSelected[0]
@@ -112,33 +172,15 @@ const CommunityMemberDetail = () => {
           <View style={styles.optionsContainerColumn}>
             <View style={styles.optionRow}>
               <Text style={styles.optionText}>Admin</Text>
-              <Switch
-                style={{
-                  transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
-                  marginLeft: 5,
-                }}
-                trackColor={{ false: '#494949', true: '#10be00' }}
-                thumbColor={memberAdmin ? '#ffff' : '#ffff'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleMakeAdmin}
-                value={memberAdmin}
-                disabled={isAdminSwitchDisable}
-              />
+              {Platform.OS === 'ios'
+                ? iosSwitch('admin')
+                : androidSwitch('admin')}
             </View>
             <View style={styles.optionRow}>
               <Text style={styles.optionText}>Mute</Text>
-              <Switch
-                style={{
-                  transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
-                  marginLeft: 5,
-                }}
-                trackColor={{ false: '#494949', true: '#10be00' }}
-                thumbColor={memberAdmin ? '#ffff' : '#ffff'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleMute}
-                value={mute}
-                disabled={muteSwitchDisabled}
-              />
+              {Platform.OS === 'ios'
+                ? iosSwitch('mute')
+                : androidSwitch('mute')}
             </View>
           </View>
         </View>

@@ -75,7 +75,7 @@ const CommunitySelected = () => {
     return communitySelectedAdmin.map((admin) => {
       return (
         <View style={styles.adminListRow} key={admin._id}>
-          <FontAwesome name="user-circle" />
+          <FontAwesome style={styles.adminAvatar} name="user-circle" />
           <Text style={styles.text}>{admin.username}</Text>
         </View>
       )
@@ -168,9 +168,6 @@ const styles = StyleSheet.create({
     marginBottom: 7,
     textAlign: 'center',
   },
-  adminListContainer: {
-    maxHeight: 60,
-  },
   NumOfMemberLabel: {
     color: '#c4c4c2',
     fontWeight: '700',
@@ -185,6 +182,9 @@ const styles = StyleSheet.create({
   adminListRow: {
     flexDirection: 'row',
     marginBottom: 5,
+  },
+  adminAvatar: {
+    fontSize: normalize(17),
   },
   NumOfMemberContainer: {
     borderBottomWidth: 1,

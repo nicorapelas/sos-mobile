@@ -1,13 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { View, StyleSheet } from 'react-native'
 
+import CommunityRefresh from '../communitySelected/CommunityRefresh'
 import CommunityInvite from './CommunityInvite'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 
 const CommunitySelectedAdminBar = () => {
   const {
-    state: { communitySelectedAdmin },
+    state: { communitySelectedAdmin, communitySelected },
   } = useContext(CommunityContext)
 
   const {
@@ -30,6 +31,7 @@ const CommunitySelectedAdminBar = () => {
     if (!isAdmin) return null
     return (
       <View style={styles.container}>
+        <CommunityRefresh />
         <CommunityInvite />
       </View>
     )
@@ -41,7 +43,7 @@ const CommunitySelectedAdminBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
 })
 

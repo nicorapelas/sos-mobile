@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -6,8 +6,13 @@ import { Context as CommunityContext } from '../../../../context/CommunityContex
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityRefresh = () => {
+  const {
+    state: { communitySelected },
+    fetchSelectedCommunity,
+  } = useContext(CommunityContext)
+
   const handlePress = () => {
-    console.log(`refresh`)
+    fetchSelectedCommunity({ id: communitySelected._id })
   }
 
   const renderContent = () => {
@@ -28,13 +33,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
-    fontSize: normalize(16),
+    fontSize: normalize(14),
     alignSelf: 'flex-end',
   },
   icon: {
     fontSize: normalize(15),
     alignSelf: 'flex-end',
     marginLeft: 5,
+    marginBottom: 1,
   },
 })
 

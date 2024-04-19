@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   ScrollView,
 } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
@@ -14,7 +13,9 @@ import CommunitySelectedAdminBar from '../communityAdmin/CommunitySelectedAdimBa
 import CommunityInvitation from '../communityAdmin/CommunityInvitation'
 import CommunityMembersList from '../communityMemberList/CommunityMembersList'
 import ExitCommunity from '../exitCommunity/ExitCommunity'
+import CommunityRefresh from './CommunityRefresh'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
+import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunitySelected = () => {
@@ -34,6 +35,10 @@ const CommunitySelected = () => {
     fetchCommunityMembersList,
     setMembersListShow,
   } = useContext(CommunityContext)
+
+  const {
+    state: { isAdmin },
+  } = useContext(UserDataContext)
 
   useEffect(() => {
     if (inviteCreatedSuccessfully) {
@@ -82,12 +87,21 @@ const CommunitySelected = () => {
     })
   }
 
+  const renderRefreshComponent = () => {
+    return (
+      <View style={styles.refreshContainer}>
+        <CommunityRefresh />
+      </View>
+    )
+  }
+
   const renderContent = () => {
     if (showInvite) return <CommunityInvitation />
     if (membersListShow) return <CommunityMembersList />
     return (
       <ScrollView style={styles.container}>
         <CommunitySelectedAdminBar />
+        {isAdmin ? null : renderRefreshComponent()}
         <View style={styles.avatar}>
           <FontAwesome style={styles.avatarPlaceHolder} name="group" />
         </View>
@@ -127,6 +141,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 25,
+  },
+  refreshContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   avatar: {
     flexDirection: 'row',

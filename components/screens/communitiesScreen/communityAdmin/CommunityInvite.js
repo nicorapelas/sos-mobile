@@ -59,13 +59,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
-    fontSize: normalize(16),
+    fontSize: normalize(14),
     alignSelf: 'flex-end',
   },
   icon: {
-    fontSize: normalize(15),
+    fontSize: normalize(14),
     alignSelf: 'flex-end',
     marginLeft: 5,
+    marginBottom: 1,
   },
 })
 

@@ -1,19 +1,18 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
+import Chat from './Chat'
 
-const NoticesScreen = () => {
+const NotificationScreen = () => {
   const renderContent = () => {
     return (
-      <>
+      <View style={styles.container}>
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
-        <View style={styles.container}>
-          <Text>Notifications screen</Text>
-        </View>
-      </>
+        <Chat />
+      </View>
     )
   }
 
@@ -37,4 +36,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default NoticesScreen
+export default NotificationScreen

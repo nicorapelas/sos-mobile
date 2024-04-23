@@ -1,108 +1,125 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
+  Button,
   KeyboardAvoidingView,
-  Platform,
+  StyleSheet,
 } from 'react-native'
-import io from 'socket.io-client'
 
-import ngrokApi from '../../../api/ngrokApi'
-
-const socket = io(ngrokApi)
+import KeyboardSpacer from '../../commom/sweeks/KeyboardSpacer'
+import { Context as MenuContext } from '../../../context/MenuContext'
+import { devKeys } from '../../../config/devKeys'
 
 const Chat = () => {
-  const [message, setMessage] = useState('')
+  const [ws, setWs] = useState(null)
   const [messages, setMessages] = useState([])
+  const [input, setInput] = useState('')
+
+  const {
+    state: { menuExpanded, useStaticMenu },
+  } = useContext(MenuContext)
 
   useEffect(() => {
-    socket.on('chat message', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg])
-    })
+    const websocket = new WebSocket(`wss://${devKeys.ngrokUri.slice(8)}`)
+    websocket.onmessage = (e) => {
+      setMessages((prev) => [...prev, e.data])
+    }
+    websocket.onerror = (e) => {
+      console.error(e.message)
+    }
+    websocket.onclose = (e) => {
+      console.log('WebSocket closed', e.reason)
+    }
+    setWs(websocket)
 
     return () => {
-      socket.off('chat message')
+      websocket.close()
     }
   }, [])
 
   const sendMessage = () => {
-    if (message.trim().length > 0) {
-      socket.emit('chat message', message)
-      setMessage('')
+    if (ws && input.trim()) {
+      const messageObject = { message: input }
+      ws.send(JSON.stringify(messageObject)) // Sending as a JSON string
+      setInput('')
     }
   }
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <ScrollView style={styles.messagesContainer}>
-        {messages.map((msg, index) => (
-          <Text key={index} style={styles.message}>
-            {msg}
-          </Text>
-        ))}
-      </ScrollView>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Type a message..."
-        />
-        <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
+  const containerStyle = [
+    styles.container,
+    !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
+  ]
+
+  const rendercontent = () => {
+    return (
+      <View style={containerStyle}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+        >
+          <View style={styles.messagesContainer}>
+            {messages.map((message, index) => (
+              <Text style={styles.message} key={index}>
+                {message}
+              </Text>
+            ))}
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={input}
+              onChangeText={setInput}
+              placeholder="Type your message here..."
+            />
+            <Button title="Send" onPress={sendMessage} color="#1e90ff" />
+          </View>
+        </KeyboardAvoidingView>
+        <KeyboardSpacer />
       </View>
-    </KeyboardAvoidingView>
-  )
+    )
+  }
+
+  return rendercontent()
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: '#f9f9f9',
   },
   messagesContainer: {
     flex: 1,
-    padding: 10,
+    marginBottom: 10,
   },
   message: {
-    fontSize: 16,
+    backgroundColor: '#ddd', // Light grey for message bubbles
+    color: '#333', // Dark text for readability
     padding: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 10,
-    marginTop: 4,
-    marginRight: 'auto',
-    backgroundColor: '#f9f9f9',
+    marginVertical: 2,
+    fontSize: 16,
+    overflow: 'hidden',
   },
   inputContainer: {
     flexDirection: 'row',
+    borderTopWidth: 1,
+    borderColor: '#ccc',
     padding: 10,
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    padding: 10,
     marginRight: 10,
-    fontSize: 16,
-  },
-  sendButton: {
-    padding: 10,
-    backgroundColor: '#007bff',
-    borderRadius: 10,
-  },
-  sendButtonText: {
-    color: '#fff',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
     fontSize: 16,
   },
 })

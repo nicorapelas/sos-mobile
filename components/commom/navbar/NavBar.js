@@ -24,7 +24,7 @@ const Navbar = () => {
     if (
       navTabSelected === 'formScreen' ||
       communitySelected ||
-      (keyboard.keyboardShown && Platform !== 'ios')
+      (keyboard.keyboardShown && Platform.OS !== 'ios')
     )
       return null
     return (

@@ -8,7 +8,7 @@ const KeyboardSpacer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
+    marginVertical: 20,
   },
 })
 

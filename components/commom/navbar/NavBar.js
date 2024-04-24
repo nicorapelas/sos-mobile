@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
+import { useKeyboard } from '@react-native-community/hooks'
 
 import DevicesNavLink from './DevicesNavLink'
 import CommunitiesNavLink from './CommunitiesNavLink'
@@ -17,8 +18,15 @@ const Navbar = () => {
     state: { communitySelected },
   } = useContext(CommunityContext)
 
+  const keyboard = useKeyboard()
+
   const renderContent = () => {
-    if (navTabSelected === 'formScreen' || communitySelected) return null
+    if (
+      navTabSelected === 'formScreen' ||
+      communitySelected ||
+      (keyboard.keyboardShown && Platform !== 'ios')
+    )
+      return null
     return (
       <View style={styles.container}>
         <View style={styles.row}>

@@ -10,16 +10,22 @@ import {
 
 import KeyboardSpacer from '../../commom/sweeks/KeyboardSpacer'
 import { Context as MenuContext } from '../../../context/MenuContext'
+import { Context as SocketContext } from '../../../context/SocketContext'
+import { Context as NotificationContext } from '../../../context/NotificationContext'
 import { devKeys } from '../../../config/devKeys'
 
 const Chat = () => {
-  const [ws, setWs] = useState(null)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
 
   const {
     state: { menuExpanded, useStaticMenu },
   } = useContext(MenuContext)
+
+  const {
+    state: { ws },
+    setWs,
+  } = useContext(SocketContext)
 
   useEffect(() => {
     const websocket = new WebSocket(`wss://${devKeys.ngrokUri.slice(8)}`)

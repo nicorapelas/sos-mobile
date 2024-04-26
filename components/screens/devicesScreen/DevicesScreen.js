@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
+import PanicButton from './panicButton/PanicButton'
 
 const DevicesScreen = () => {
   const renderContent = () => {
@@ -12,6 +13,7 @@ const DevicesScreen = () => {
         </View>
         <View style={styles.container}>
           <Text>Devices screen</Text>
+          <PanicButton />
         </View>
       </>
     )

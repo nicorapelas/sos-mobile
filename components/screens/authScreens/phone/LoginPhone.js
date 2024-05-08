@@ -7,9 +7,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native'
-import CountryPicker from 'react-native-country-picker-modal'
-import { parsePhoneNumberFromString } from 'libphonenumber-js'
+// import CountryPicker from 'react-native-country-picker-modal'
+// import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { Context as AuthContext } from '../../../../context/AuthContext'
@@ -47,17 +48,20 @@ const LoginPhone = () => {
   }, [userCountryIpData])
 
   const handleOtpRequest = () => {
-    const phoneNumberObj = parsePhoneNumberFromString(
-      userPhoneNumber,
-      countryCode
-    )
-    if (phoneNumberObj?.isValid()) {
-      let phoneNum = phoneNumberObj.formatInternational()
-      setUserPhoneNumber(phoneNum)
-      requestOtpSms({ phoneNumber: phoneNum })
-    } else {
-      alert('Invalid phone number')
-    }
+    let phoneNum = `+27827588788`
+    setUserPhoneNumber(phoneNum)
+    requestOtpSms({ phoneNumber: phoneNum })
+    // const phoneNumberObj = parsePhoneNumberFromString(
+    //   userPhoneNumber,
+    //   countryCode
+    // )
+    // if (phoneNumberObj?.isValid()) {
+    //   let phoneNum = phoneNumberObj.formatInternational()
+    //   setUserPhoneNumber(phoneNum)
+    //   requestOtpSms({ phoneNumber: phoneNum })
+    // } else {
+    //   alert('Invalid phone number')
+    // }
   }
 
   const renderForm = () => {
@@ -76,20 +80,6 @@ const LoginPhone = () => {
         <Button
           title="Select Country"
           onPress={() => setCountryPickerVisible(true)}
-        />
-        <CountryPicker
-          withFilter
-          withFlag
-          withCountryNameButton
-          withCallingCode
-          withAlphaFilter
-          withCallingCodeButton
-          countryCode={countryCode}
-          onSelect={(country) => {
-            setCountryCode(country.cca2)
-            setUserPhoneNumber(`+${country.callingCode[0]}`)
-          }}
-          visible={countryPickerVisible}
         />
         <TextInput
           style={styles.input}

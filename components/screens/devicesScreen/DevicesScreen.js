@@ -2,20 +2,17 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
-import PanicButton from './panicButton/PanicButton'
+import SsePanic from './ssePanic/SsePanic'
 
 const DevicesScreen = () => {
   const renderContent = () => {
     return (
-      <>
+      <View style={styles.container}>
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
-        <View style={styles.container}>
-          <Text>Devices screen</Text>
-          <PanicButton />
-        </View>
-      </>
+        <SsePanic />
+      </View>
     )
   }
 

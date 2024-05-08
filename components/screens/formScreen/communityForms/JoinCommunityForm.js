@@ -1,5 +1,11 @@
 import React, { useState, useContext } from 'react'
-import { View, Text, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native'
 
 import FormField from '../elements/FormField'
 import SubmitButton from '../elements/SubmitButton'

@@ -6,6 +6,7 @@ import {
   Button,
   KeyboardAvoidingView,
   StyleSheet,
+  Platform,
 } from 'react-native'
 
 import KeyboardSpacer from '../../commom/sweeks/KeyboardSpacer'

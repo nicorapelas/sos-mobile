@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
-import SsePanic from './ssePanic/SsePanic'
+import SseEvents from '../../middlewares/SseEvents'
 
 const DevicesScreen = () => {
   const renderContent = () => {
@@ -11,7 +11,7 @@ const DevicesScreen = () => {
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
-        <SsePanic />
+        <SseEvents />
       </View>
     )
   }

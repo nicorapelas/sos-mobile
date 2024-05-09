@@ -21,8 +21,11 @@ const SsePanic = () => {
 
   useEffect(() => {
     const { closeConnection } = SSEConnection(
-      'https://f03a-105-244-183-211.ngrok-free.app/events',
-      (data) => setMessage(data.message)
+      'https://8ca7-105-184-75-3.ngrok-free.app/events',
+      (data) => {
+        console.log(`data:`, data)
+        setMessage(data.message)
+      }
     )
     return () => {
       closeConnection()

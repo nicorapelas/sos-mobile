@@ -4,8 +4,8 @@ import createDataContext from './createDataContext'
 // Reducer
 const SseReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_SSE_DATA':
-      return { ...state, socketData: action.payload }
+    case 'SET_SSE_RESPONSE_DATA':
+      return { ...state, sseResponseData: action.payload }
     default:
       return state
   }
@@ -24,17 +24,17 @@ const triggerPanic = (dispatch) => async () => {
   }
 }
 
-const setSseData = (dispatch) => (data) => {
-  dispatch({ type: 'SET_SSE_DATA', payload: data })
+const setSseResponseData = (dispatch) => (data) => {
+  dispatch({ type: 'SET_SSE_RESPONSE_DATA', payload: data })
 }
 
 export const { Provider, Context } = createDataContext(
   SseReducer,
   {
     triggerPanic,
-    setSseData,
+    setSseResponseData,
   },
   {
-    socketData: null,
+    sseResponseData: null,
   }
 )

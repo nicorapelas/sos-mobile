@@ -14,7 +14,7 @@
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/hooks": "^3.0.0",
     "axios": "^1.6.2",
-    "expo": "~51.0.2",
+    "expo": "~51.0.5",
     "expo-device": "^6.0.2",
     "expo-status-bar": "~1.12.1",
     "libphonenumber-js": "^1.10.53",
@@ -24,7 +24,8 @@
     "react-native-base64": "^0.2.1",
     "react-native-ble-plx": "^3.1.2",
     "react-native-country-picker-modal": "^2.0.0",
-    "react-native-event-source": "^1.1.0"
+    "react-native-event-source": "^1.1.0",
+    "react-native-sse": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5"

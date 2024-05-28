@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
-import SseTest from './SseTest'
+import SocketIo from '../../middlewares/SocketIo'
 
 const DevicesScreen = () => {
   const renderContent = () => {
@@ -11,7 +11,7 @@ const DevicesScreen = () => {
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
-        <SseTest />
+        <SocketIo />
       </View>
     )
   }

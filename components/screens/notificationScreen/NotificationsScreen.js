@@ -2,7 +2,6 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import Menu from '../../commom/menu/Menu'
-import Chat from './Chat'
 
 const NotificationScreen = () => {
   const renderContent = () => {
@@ -11,7 +10,6 @@ const NotificationScreen = () => {
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
-        <Chat />
       </View>
     )
   }

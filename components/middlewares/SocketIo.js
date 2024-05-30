@@ -22,24 +22,28 @@ const SocketIo = () => {
 
   useEffect(() => {
     const initializeSocket = async () => {
-      const token = await AsyncStorage.getItem('token')
-      if (!token) {
-        console.error('No token found')
-        return
+      try {
+        const token = await AsyncStorage.getItem('token')
+        if (!token) {
+          console.error('No token found')
+          return
+        }
+
+        const newSocket = io(devKeys.ngrokUri, {
+          extraHeaders: {
+            authorization: `Bearer ${token}`, // Pass the JWT token here
+          },
+          reconnection: true,
+          reconnectionAttempts: Infinity,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          randomizationFactor: 0.5,
+        })
+
+        setSocket(newSocket)
+      } catch (error) {
+        console.error('Error initializing socket:', error)
       }
-
-      const newSocket = io(devKeys.ngrokUri, {
-        extraHeaders: {
-          authorization: `Bearer ${token}`, // Pass the JWT token here
-        },
-        reconnection: true,
-        reconnectionAttempts: Infinity,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        randomizationFactor: 0.5,
-      })
-
-      setSocket(newSocket)
     }
 
     initializeSocket()
@@ -117,36 +121,30 @@ const SocketIo = () => {
     }
   }
 
-  const button = () => {
-    return (
-      <TouchableOpacity onPress={handleSend}>
-        <Text>Send</Text>
-      </TouchableOpacity>
-    )
-  }
+  const button = () => (
+    <TouchableOpacity onPress={handleSend}>
+      <Text>Send</Text>
+    </TouchableOpacity>
+  )
 
   const containerStyle = [
     styles.container,
     !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
   ]
 
-  const renderContent = () => {
-    return (
-      <View style={containerStyle}>
+  return (
+    <View style={containerStyle}>
+      <View>
         <View>
-          <View>
-            <Text>Status: {status}</Text>
-            {messages.map((msg, index) => (
-              <Text key={index}>{msg.message}</Text>
-            ))}
-          </View>
-          <View>{button()}</View>
+          <Text>Status: {status}</Text>
+          {messages.map((msg, index) => (
+            <Text key={index}>{msg.message}</Text>
+          ))}
         </View>
+        <View>{button()}</View>
       </View>
-    )
-  }
-
-  return renderContent()
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

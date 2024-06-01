@@ -167,13 +167,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingBottom: 20,
   },
-  label: {
-    color: '#c4c4c2',
-    fontWeight: '700',
-    fontSize: normalize(15),
-    marginBottom: 7,
-    textAlign: 'center',
-  },
   text: {
     fontSize: normalize(14),
     textAlign: 'center',

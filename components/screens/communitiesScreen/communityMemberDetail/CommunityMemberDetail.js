@@ -11,7 +11,6 @@ import { FontAwesome } from '@expo/vector-icons'
 
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { Context as MenuContext } from '../../../../context/MenuContext'
-import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityMemberDetail = () => {
@@ -37,10 +36,6 @@ const CommunityMemberDetail = () => {
   const {
     state: { menuExpanded, useStaticMenu },
   } = useContext(MenuContext)
-
-  const {
-    state: { user },
-  } = useContext(UserDataContext)
 
   useEffect(() => {
     let check = communitySelectedAdmin.filter((admin) => {
@@ -203,7 +198,7 @@ const styles = StyleSheet.create({
   },
   avatarPlaceHolder: {
     color: '#c4c4c2',
-    fontSize: normalize(80),
+    fontSize: normalize(60),
     textAlign: 'center',
     margin: 15,
   },

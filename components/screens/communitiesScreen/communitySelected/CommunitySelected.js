@@ -14,6 +14,7 @@ import CommunityInvitation from '../communityAdmin/CommunityInvitation'
 import CommunityMembersList from '../communityMemberList/CommunityMembersList'
 import ExitCommunity from '../exitCommunity/ExitCommunity'
 import CommunityRefresh from './CommunityRefresh'
+import CommunityPanicAlert from './CommunityPanicAlert'
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
@@ -129,6 +130,7 @@ const CommunitySelected = () => {
           <Text style={styles.NumOfMemberLabel}>Number of members</Text>
           {renderNumberOfMembers()}
         </View>
+        <CommunityPanicAlert />
         <ExitCommunity />
       </ScrollView>
     )

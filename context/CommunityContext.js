@@ -312,6 +312,21 @@ const setClearCommunityList = (dispatch) => (data) => {
   dispatch({ type: 'SET_CLEAR_COMMUNITY_LIST', payload: data })
 }
 
+const setCommunityPanicAlert = (dispatch) => async (data) => {
+  try {
+    const response = await ngrokApi.post(
+      '/community/set-community-panic-alert',
+      data
+    )
+    console.log(`response`, response.data)
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
+}
+
 export const { Provider, Context } = createDataContext(
   CommunityReducer,
   {
@@ -338,6 +353,7 @@ export const { Provider, Context } = createDataContext(
     setMuteStatus,
     exitCommunity,
     setClearCommunityList,
+    setCommunityPanicAlert,
   },
   {
     loading: false,

@@ -313,6 +313,7 @@ const setClearCommunityList = (dispatch) => (data) => {
 }
 
 const setCommunityPanicAlert = (dispatch) => async (data) => {
+  // dispatch({ type: 'MEMBER_OPTION_UPDATE_LOADING' })
   try {
     const response = await ngrokApi.post(
       '/community/set-community-panic-alert',

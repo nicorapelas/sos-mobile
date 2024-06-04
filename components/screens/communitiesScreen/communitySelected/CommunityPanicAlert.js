@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 import { Context as CommunityContext } from '../../../../context/CommunityContext'
+import { Context as UserDataContext } from '../../../../context/UserDataContext'
 import { normalize } from '../../../../utils/fontUtils'
 
 const CommunityPanicAlert = () => {
@@ -20,10 +21,21 @@ const CommunityPanicAlert = () => {
     setCommunityPanicAlert,
   } = useContext(CommunityContext)
 
+  const {
+    state: { user },
+  } = useContext(UserDataContext)
+
   useEffect(() => {
-    console.log(`panicAlert:`, panicAlert)
-    console.log(`communitySelected:`, communitySelected)
-  }, [panicAlert, communitySelected])
+    if (user && communitySelected) {
+      const { community } = user
+      const { _id } = communitySelected
+      let match = community.filter((com) => {
+        return com.communityId === _id
+      })
+
+      console.log(`match`, match[0].panicAlertUser)
+    }
+  }, [user, communitySelected])
 
   useEffect(() => {
     const { _id } = communitySelected

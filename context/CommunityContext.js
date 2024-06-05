@@ -319,7 +319,14 @@ const setCommunityPanicAlert = (dispatch) => async (data) => {
       '/community/set-community-panic-alert',
       data
     )
-    console.log(`response`, response.data)
+    if (response.data.success) {
+      dispatch({ type: 'SET_SUCCESS', payload: response.data.success })
+      dispatch({
+        type: 'SET_UPDATE_LIST',
+        payload: response.data.communityList,
+      })
+      return
+    }
   } catch (error) {
     dispatch({
       type: 'SET_ERROR',

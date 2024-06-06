@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Context as MenuContext } from '../../context/MenuContext'
 import { Context as UserDataContext } from '../../context/UserDataContext'
-import { Context as SocketContext } from '../../context/SocketContext'
 import { devKeys } from '../../config/devKeys'
 
 const SocketIo = () => {
@@ -20,15 +19,6 @@ const SocketIo = () => {
   const {
     state: { user },
   } = useContext(UserDataContext)
-
-  const {
-    state: { socketData },
-    setSocketData,
-  } = useContext(SocketContext)
-
-  useEffect(() => {
-    console.log(`socketData:`, socketData)
-  }, [socketData])
 
   useEffect(() => {
     const initializeSocket = async () => {
@@ -70,10 +60,9 @@ const SocketIo = () => {
       socket.on('connect', () => {
         setStatus('Connected')
         console.log('Connected to Socket.IO server')
+
         // Listen for messages
         socket.on('message', (data) => {
-          console.log(`data:`, data)
-          setSocketData(data)
           setMessages((prevMessages) => [...prevMessages, data])
         })
       })
@@ -126,6 +115,7 @@ const SocketIo = () => {
     }
     if (socket) {
       socket.emit('message', message)
+      console.log('Sent message:', message)
     } else {
       console.error('Socket is not initialized')
     }

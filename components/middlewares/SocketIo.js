@@ -27,10 +27,6 @@ const SocketIo = () => {
   } = useContext(SocketContext)
 
   useEffect(() => {
-    console.log(`socketData:`, socketData)
-  }, [socketData])
-
-  useEffect(() => {
     const initializeSocket = async () => {
       try {
         const token = await AsyncStorage.getItem('token')
@@ -72,9 +68,7 @@ const SocketIo = () => {
         console.log('Connected to Socket.IO server')
         // Listen for messages
         socket.on('message', (data) => {
-          console.log(`data:`, data)
           setSocketData(data)
-          setMessages((prevMessages) => [...prevMessages, data])
         })
       })
 
@@ -118,7 +112,26 @@ const SocketIo = () => {
     }
   }, [socket])
 
-  const handleSend = () => {
+  useEffect(() => {
+    if (socketData) {
+      console.log(`socketData`, socketData)
+      const { event } = socketData
+      switch (event) {
+        case 'panic':
+          console.log(`user panic`)
+          setSocketData(null)
+          break
+        case 'membersNotification':
+          setMessages((prevMessages) => [...prevMessages, socketData])
+          setSocketData(null)
+          break
+        default:
+          break
+      }
+    }
+  }, [socketData])
+
+  const handleSendPanic = () => {
     const message = {
       event: 'panic',
       message: 'panic triggered',
@@ -131,9 +144,28 @@ const SocketIo = () => {
     }
   }
 
-  const button = () => (
-    <TouchableOpacity onPress={handleSend}>
-      <Text>Send</Text>
+  const handleSendNotification = () => {
+    const message = {
+      event: 'membersNotification',
+      message: 'suspicious car in 8th street',
+      userId: user._id,
+    }
+    if (socket) {
+      socket.emit('message', message)
+    } else {
+      console.error('Socket is not initialized')
+    }
+  }
+
+  const panicButton = () => (
+    <TouchableOpacity onPress={handleSendPanic}>
+      <Text>Send panic</Text>
+    </TouchableOpacity>
+  )
+
+  const notficationButton = () => (
+    <TouchableOpacity onPress={handleSendNotification}>
+      <Text>Send notification</Text>
     </TouchableOpacity>
   )
 
@@ -151,7 +183,10 @@ const SocketIo = () => {
             <Text key={index}>{msg.message}</Text>
           ))}
         </View>
-        <View>{button()}</View>
+        <View>
+          {panicButton()}
+          {notficationButton()}
+        </View>
       </View>
     </View>
   )

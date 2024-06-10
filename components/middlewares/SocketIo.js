@@ -1,30 +1,36 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { useState, useContext, useEffect } from 'react'
 import io from 'socket.io-client'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { Context as MenuContext } from '../../context/MenuContext'
-import { Context as UserDataContext } from '../../context/UserDataContext'
 import { Context as SocketContext } from '../../context/SocketContext'
+import { Context as PanicContext } from '../../context/PanicContext'
+import { Context as NotificationContext } from '../../context/NotificationContext'
 import { devKeys } from '../../config/devKeys'
 
 const SocketIo = () => {
   const [socket, setSocket] = useState(null)
-  const [messages, setMessages] = useState([])
-  const [status, setStatus] = useState('Disconnected')
 
   const {
-    state: { menuExpanded, useStaticMenu },
-  } = useContext(MenuContext)
-
-  const {
-    state: { user },
-  } = useContext(UserDataContext)
-
-  const {
-    state: { socketData },
+    state: { socketData, socketConnectStatus },
+    setSocketConnectStatus,
     setSocketData,
   } = useContext(SocketContext)
+
+  const {
+    state: { panicDataSent },
+    setPanicDataReceived,
+    setPanicDataSent,
+  } = useContext(PanicContext)
+
+  const {
+    state: { notificationSent },
+    setNotificationReceived,
+    createNotification,
+  } = useContext(NotificationContext)
+
+  useEffect(() => {
+    console.log(`socketConnectStatus:`, socketConnectStatus)
+  }, [socketConnectStatus])
 
   useEffect(() => {
     const initializeSocket = async () => {
@@ -64,7 +70,7 @@ const SocketIo = () => {
   useEffect(() => {
     if (socket) {
       socket.on('connect', () => {
-        setStatus('Connected')
+        setSocketConnectStatus('Connected')
         console.log('Connected to Socket.IO server')
         // Listen for messages
         socket.on('message', (data) => {
@@ -73,17 +79,17 @@ const SocketIo = () => {
       })
 
       socket.on('disconnect', () => {
-        setStatus('Disconnected')
+        setSocketConnectStatus('Disconnected')
         console.log('Disconnected from Socket.IO server')
       })
 
       socket.on('reconnect_attempt', () => {
-        setStatus('Reconnecting...')
+        setSocketConnectStatus('Reconnecting...')
         console.log('Attempting to reconnect...')
       })
 
       socket.on('reconnect', (attemptNumber) => {
-        setStatus('Connected')
+        setSocketConnectStatus('Connected')
         console.log(
           'Reconnected to Socket.IO server after',
           attemptNumber,
@@ -96,7 +102,7 @@ const SocketIo = () => {
       })
 
       socket.on('reconnect_failed', () => {
-        setStatus('Failed to reconnect')
+        setSocketConnectStatus('Failed to reconnect')
         console.error('Failed to reconnect to Socket.IO server')
       })
 
@@ -119,10 +125,11 @@ const SocketIo = () => {
       switch (event) {
         case 'panic':
           console.log(`user panic`)
+          setPanicDataReceived(socketData)
           setSocketData(null)
           break
-        case 'membersNotification':
-          setMessages((prevMessages) => [...prevMessages, socketData])
+        case 'membersNotification': // Notification Received
+          setNotificationReceived(socketData)
           setSocketData(null)
           break
         default:
@@ -131,73 +138,31 @@ const SocketIo = () => {
     }
   }, [socketData])
 
-  const handleSendPanic = () => {
-    const message = {
-      event: 'panic',
-      message: 'panic triggered',
-      userId: user._id,
+  useEffect(() => {
+    console.log(`panicDataSent:`, panicDataSent)
+    if (panicDataSent) {
+      if (socket) {
+        socket.emit('message', panicDataSent)
+      } else {
+        console.error('Socket is not initialized')
+      }
+      setPanicDataSent(null)
     }
-    if (socket) {
-      socket.emit('message', message)
-    } else {
-      console.error('Socket is not initialized')
+  }, [panicDataSent])
+
+  useEffect(() => {
+    console.log(`notificationSent:`, notificationSent)
+    if (notificationSent) {
+      if (socket) {
+        socket.emit('message', notificationSent)
+      } else {
+        console.error('Socket is not initialized')
+      }
+      setPanicDataSent(null)
     }
-  }
+  }, [notificationSent])
 
-  const handleSendNotification = () => {
-    const message = {
-      event: 'membersNotification',
-      message: 'suspicious car in 8th street',
-      userId: user._id,
-    }
-    if (socket) {
-      socket.emit('message', message)
-    } else {
-      console.error('Socket is not initialized')
-    }
-  }
-
-  const panicButton = () => (
-    <TouchableOpacity onPress={handleSendPanic}>
-      <Text>Send panic</Text>
-    </TouchableOpacity>
-  )
-
-  const notficationButton = () => (
-    <TouchableOpacity onPress={handleSendNotification}>
-      <Text>Send notification</Text>
-    </TouchableOpacity>
-  )
-
-  const containerStyle = [
-    styles.container,
-    !menuExpanded && !useStaticMenu ? { zIndex: 10 } : {},
-  ]
-
-  return (
-    <View style={containerStyle}>
-      <View>
-        <View>
-          <Text>Status: {status}</Text>
-          {messages.map((msg, index) => (
-            <Text key={index}>{msg.message}</Text>
-          ))}
-        </View>
-        <View>
-          {panicButton()}
-          {notficationButton()}
-        </View>
-      </View>
-    </View>
-  )
+  return null
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-})
 
 export default SocketIo

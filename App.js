@@ -8,6 +8,7 @@ import { Provider as CommunityProvider } from './context/CommunityContext'
 import { Provider as ModalProvider } from './context/ModalContext'
 import { Provider as SocketProvider } from './context/SocketContext'
 import { Provider as NotificationProvider } from './context/NotificationContext'
+import { Provider as PanicProvider } from './context/PanicContext'
 import AppScreens from './AppScreens'
 
 export default function App() {
@@ -22,7 +23,9 @@ export default function App() {
                   <ModalProvider>
                     <SocketProvider>
                       <NotificationProvider>
-                        <AppScreens />
+                        <PanicProvider>
+                          <AppScreens />
+                        </PanicProvider>
                       </NotificationProvider>
                     </SocketProvider>
                   </ModalProvider>

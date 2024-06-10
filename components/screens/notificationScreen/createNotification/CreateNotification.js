@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
-import { Context as PanicContext } from '../../../../context/PanicContext'
+import { Context as NotificationContext } from '../../../../context/NotificationContext'
 import { Context as MenuContext } from '../../../../context/MenuContext'
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
 
-const PanicButton = () => {
-  const { setPanicDataSent } = useContext(PanicContext)
+const CreateNotification = () => {
+  const { setNotificationReceived, createNotification } =
+    useContext(NotificationContext)
 
   const {
     state: { menuExpanded, useStaticMenu },
@@ -16,32 +17,18 @@ const PanicButton = () => {
     state: { user },
   } = useContext(UserDataContext)
 
-  // const handleSend = () => {
-  //   const message = {
-  //     event: 'panic',
-  //     message: 'panic triggered',
-  //     userId: user._id,
-  //   }
-  //   if (socket) {
-  //     socket.emit('message', message)
-  //     console.log('Sent message:', message)
-  //   } else {
-  //     console.error('Socket is not initialized')
-  //   }
-  // }
-
   const handleSend = () => {
     const message = {
-      event: 'panic',
-      message: 'panic triggered',
+      event: 'membersNotification',
+      message: '3 mavros outside!',
       userId: user._id,
     }
-    setPanicDataSent(message)
+    createNotification(message)
   }
 
   const button = () => (
     <TouchableOpacity onPress={handleSend}>
-      <Text>Send Panic</Text>
+      <Text>Send Notification</Text>
     </TouchableOpacity>
   )
 
@@ -67,4 +54,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default PanicButton
+export default CreateNotification

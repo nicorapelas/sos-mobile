@@ -6,6 +6,7 @@ import { Context as AuthContext } from './context/AuthContext'
 import InitFetchCollections from './components/data/InitFetchCollections'
 import DataDrvRedirecting from './components/data/DataDrvRedirecting'
 import AppLoadingCheck from './components/commom/loader/AppLoadingCheck'
+import SocketIo from './components/middlewares/SocketIo'
 import Loader from './components/commom/loader/Loader'
 import Welcome from './components/screens/authScreens/Welcome'
 import MainScreen from './components/screens/main/MainScreen'
@@ -71,6 +72,7 @@ export default function AppScreens() {
       <InitFetchCollections />
       <DataDrvRedirecting />
       <AppLoadingCheck />
+      <SocketIo />
       {renderContent()}
     </>
   )

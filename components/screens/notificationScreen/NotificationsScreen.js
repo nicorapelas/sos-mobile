@@ -1,6 +1,9 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
+import CreateNotification from './createNotification/CreateNotification'
+import ReceivedNotifications from './receivedNotifications/ReceivedNotifications'
+
 import Menu from '../../commom/menu/Menu'
 
 const NotificationScreen = () => {
@@ -10,6 +13,8 @@ const NotificationScreen = () => {
         <View style={styles.menuWrapper}>
           <Menu />
         </View>
+        <CreateNotification />
+        <ReceivedNotifications />
       </View>
     )
   }

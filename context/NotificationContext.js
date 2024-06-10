@@ -1,34 +1,45 @@
 import createDataContext from './createDataContext'
+import ngrokApi from '../api/ngrokApi'
 
 // Reducer
 const NotificationReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_NOTIFICATION':
-      return { ...state, notification: action.payload }
-    case 'SET_MESSAGES':
-      return { ...state, messages: action.payload }
+    case 'SET_NOTIFICATION_RECEIVED':
+      return { ...state, notificationReceived: action.payload }
+    case 'CREATE_NOTIFICATION':
+      return { ...state, notificationSent: action.payload }
     default:
       return state
   }
 }
 
 // Actions
-const setNotification = (dispatch) => (data) => {
-  dispatch({ type: 'SET_NOTIFICATION', payload: data })
+const setNotificationReceived = (dispatch) => (data) => {
+  dispatch({ type: 'SET_NOTIFICATION_RECEIVED', payload: data })
 }
 
-const setMessages = (dispatch) => (data) => {
-  dispatch({ type: 'SET_MESSAGES', payload: data })
+const createNotification = (dispatch) => async (data) => {
+  try {
+    const response = await ngrokApi.post('/notification/create', data)
+    console.log(`response`, response.data)
+    dispatch({ type: 'CREATE_NOTIFICATION', payload: data })
+    return
+  } catch (error) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: error,
+    })
+  }
 }
 
 export const { Provider, Context } = createDataContext(
   NotificationReducer,
   {
-    setNotification,
-    setMessages,
+    setNotificationReceived,
+    createNotification,
   },
   {
-    notification: '',
-    messages: [],
+    notificationReceived: [],
+    notificationSent: [],
   }
 )

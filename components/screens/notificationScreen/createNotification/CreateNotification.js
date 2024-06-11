@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 import { Context as NotificationContext } from '../../../../context/NotificationContext'
 import { Context as MenuContext } from '../../../../context/MenuContext'
 import { Context as UserDataContext } from '../../../../context/UserDataContext'
+import { Context as CommunityContext } from '../../../../context/CommunityContext'
 
 const CreateNotification = () => {
   const { setNotificationReceived, createNotification } =
@@ -17,11 +18,16 @@ const CreateNotification = () => {
     state: { user },
   } = useContext(UserDataContext)
 
+  const {
+    state: { communityList },
+  } = useContext(CommunityContext)
+
   const handleSend = () => {
     const message = {
       event: 'membersNotification',
       message: '3 mavros outside!',
       userId: user._id,
+      communityList,
     }
     createNotification(message)
   }
